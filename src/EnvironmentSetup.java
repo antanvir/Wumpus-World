@@ -72,7 +72,6 @@ public class EnvironmentSetup
 		{
 		
 			Random rand = new Random();
-
 			
 			pit_placement = new int [10][10];
 			wumpus_placement = new int [10][10];
@@ -81,6 +80,7 @@ public class EnvironmentSetup
 			breeze_placement = new int [10][10];
 			smell_placement = new int [10][10];
 			glitter_placement = new int [10][10];
+			
 			
 			for ( int row = 0; row < BOARD_SIZE; row++) 
 			{
@@ -95,7 +95,8 @@ public class EnvironmentSetup
 					glitter_placement[row][col] = 0;
 					
 				}
-			}	
+			}
+				
 		
 			for(int i = 0; i< PIT_LIMIT; i++) { 
 				int x = rand.nextInt( 100 );
@@ -144,8 +145,6 @@ public class EnvironmentSetup
 		}
 		while( !bfs( ) );
 		
-		
-		
 		for ( int row = 0; row < BOARD_SIZE; row++ )
 		{
 			for ( int col = 0; col < BOARD_SIZE; col++ )
@@ -158,7 +157,6 @@ public class EnvironmentSetup
 			}
 			System.out.println();
 		}
-		
 		
 		
 		for ( int row = 0; row < BOARD_SIZE; row++ )

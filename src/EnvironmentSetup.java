@@ -59,10 +59,6 @@ public class EnvironmentSetup
 	}
 	
 
-//	public static void main( String[] args )
-//	{
-//		new EnvironmentSetup( );
-//	}
 	
 
 	public void generate_board( )
@@ -76,11 +72,7 @@ public class EnvironmentSetup
 		{
 		
 			Random rand = new Random();
-//			int wumpus_placed = 0;
-//			int pits_placed = 0;
-//			int gold_placed = 0;	
-//			int gold_placed_x = 0;
-//			int gold_placed_y = 0;
+
 			
 			pit_placement = new int [10][10];
 			wumpus_placement = new int [10][10];
@@ -90,7 +82,7 @@ public class EnvironmentSetup
 			smell_placement = new int [10][10];
 			glitter_placement = new int [10][10];
 			
-			for ( int row = 0; row < BOARD_SIZE; row++) // CLEAR THEM ALL OUT
+			for ( int row = 0; row < BOARD_SIZE; row++) 
 			{
 				for ( int col = 0; col < BOARD_SIZE; col++)
 				{
@@ -105,7 +97,7 @@ public class EnvironmentSetup
 				}
 			}	
 		
-			for(int i = 0; i< PIT_LIMIT; i++) { // PLACE THE PITS
+			for(int i = 0; i< PIT_LIMIT; i++) { 
 				int x = rand.nextInt( 100 );
 				int row = x / 10;
 				int col = x % 10;
@@ -117,7 +109,7 @@ public class EnvironmentSetup
 			}
 
 			
-			for(int i = 0; i< WUMPUS_LIMIT; i++) { // PLACE THE WUMPUS'S
+			for(int i = 0; i< WUMPUS_LIMIT; i++) { 
 				int x = rand.nextInt( 100 );
 				int row = x / 10;
 				int col = x % 10;
@@ -132,7 +124,7 @@ public class EnvironmentSetup
 				wumpus_placement[row][col] = 1;
 			}
 					
-			for(int i = 0; i< GOLD_LIMIT; i++) { // PLACE THE GOLD
+			for(int i = 0; i< GOLD_LIMIT; i++) {
 				int x = rand.nextInt( 100 );
 				int row = x / 10;
 				int col = x % 10;
@@ -146,15 +138,14 @@ public class EnvironmentSetup
 				}
 
 				gold_placement[row][col] = 1;				
-//				gold_placed_x = col;
-//				gold_placed_y = row;	
+
 			}
 			
 		}
-		while( !bfs( ) ); // DOES A SOLUTION EXIST?
+		while( !bfs( ) );
 		
 		
-		// Print the board
+		
 		for ( int row = 0; row < BOARD_SIZE; row++ )
 		{
 			for ( int col = 0; col < BOARD_SIZE; col++ )
@@ -169,7 +160,7 @@ public class EnvironmentSetup
 		}
 		
 		
-		// Create the board
+		
 		for ( int row = 0; row < BOARD_SIZE; row++ )
 		{
 			for ( int col = 0; col < BOARD_SIZE; col++ )
@@ -189,27 +180,27 @@ public class EnvironmentSetup
 			{
 				if ( pit_placement[row][col] == 1 )
 				{
-					// PLACE THE BREEZES
+				
 							
-					try // LEFT Neighbor
+					try
 					{
 						if( pit_placement[row][col-1] != 1 ) breeze_placement[row][col-1] = 1;
 					}
 					catch( ArrayIndexOutOfBoundsException e ){  }
 		
-					try // UP Neighbor
+					try 
 					{
 						if( pit_placement[row-1][col] != 1 ) breeze_placement[row-1][col] = 1;
 					}
 					catch( ArrayIndexOutOfBoundsException e ){  }
 		
-					try // RIGHT Neighbor
+					try 
 					{
 						if( pit_placement[row][col+1] != 1 ) breeze_placement[row][col+1] = 1;
 					}
 					catch( ArrayIndexOutOfBoundsException e ){  }
 		
-					try // DOWN Neighbor
+					try 
 					{
 						if( pit_placement[row+1][col] != 1 ) breeze_placement[row+1][col] = 1;
 					}
@@ -218,27 +209,27 @@ public class EnvironmentSetup
 				
 				if ( wumpus_placement[row][col] == 1 )
 				{
-					// PLACE THE SMELLIES
+					
 							
-					try // LEFT Neighbor
+					try 
 					{
 						if( pit_placement[row][col-1] != 1 ) smell_placement[row][col-1] = 1;
 					}
 					catch( ArrayIndexOutOfBoundsException e ){  }
 		
-					try // UP Neighbor
+					try 
 					{
 						if( pit_placement[row-1][col] != 1 ) smell_placement[row-1][col] = 1;
 					}
 					catch( ArrayIndexOutOfBoundsException e ){  }
 		
-					try // RIGHT Neighbor
+					try 
 					{
 						if( pit_placement[row][col+1] != 1 ) smell_placement[row][col+1] = 1;
 					}
 					catch( ArrayIndexOutOfBoundsException e ){  }
 		
-					try // DOWN Neighbor
+					try 
 					{
 						if( pit_placement[row+1][col] != 1 ) smell_placement[row+1][col] = 1;
 					}
@@ -247,27 +238,27 @@ public class EnvironmentSetup
 				
 				if ( gold_placement[row][col] == 1 )
 				{
-					// PLACE THE GLITTER
+					
 							
-					try // LEFT Neighbor
+					try 
 					{
 						if ( pit_placement[row][col-1] != 1 ) glitter_placement[row][col-1] = 1;
 					}
 					catch( ArrayIndexOutOfBoundsException e ){  }
 		
-					try // UP Neighbor
+					try 
 					{
 						if ( pit_placement[row-1][col] != 1 ) glitter_placement[row-1][col] = 1;
 					}
 					catch( ArrayIndexOutOfBoundsException e ){  }
 		
-					try // RIGHT Neighbor
+					try 
 					{
 						if ( pit_placement[row][col+1] != 1 ) glitter_placement[row][col+1] = 1;
 					}
 					catch( ArrayIndexOutOfBoundsException e ){  }
 		
-					try // DOWN Neighbor
+					try 
 					{
 						if ( pit_placement[row+1][col] != 1 ) glitter_placement[row+1][col] = 1;
 					}
@@ -296,7 +287,7 @@ public class EnvironmentSetup
 			}
 		}
 		
-		for ( int row = 0; row < BOARD_SIZE; row++ ) // GENERATE UNIQUE NODE "ID"
+		for ( int row = 0; row < BOARD_SIZE; row++ ) 
 		{
 			for ( int col = 0; col < BOARD_SIZE; col++ )
 			{
@@ -313,29 +304,29 @@ public class EnvironmentSetup
 			}
 		}
 		
-		for ( int row = 0; row < BOARD_SIZE; row++ ) // GENERATE RELATIONSHIP MATRIX
+		for ( int row = 0; row < BOARD_SIZE; row++ ) 
 		{
 			for ( int col = 0; col < BOARD_SIZE; col++ )
 			{
-				try // LEFT Neighbor
+				try
 				{
 					relationships[ nodesID[row][col] ][ nodesID[row][col-1]  ] = 1;
 				}
 				catch( ArrayIndexOutOfBoundsException e ){  }
 				
-				try // UP Neighbor
+				try 
 				{
 					relationships[ nodesID[row][col] ][ nodesID[row-1][col]  ] = 1;
 				}
 				catch( ArrayIndexOutOfBoundsException e ){  }
 				
-				try // RIGHT Neighbor
+				try 
 				{
 					relationships[ nodesID[row][col] ][ nodesID[row][col+1]  ] = 1;
 				}
 				catch( ArrayIndexOutOfBoundsException e ){  }
 				
-				try // DOWN Neighbor
+				try 
 				{
 					relationships[ nodesID[row][col] ][ nodesID[row+1][col]  ] = 1;
 				}
@@ -346,16 +337,16 @@ public class EnvironmentSetup
 		queue.add( nodesID[BOARD_SIZE-1][0 ] );
 		marked[BOARD_SIZE-1][0 ] = 1;
 		
-		while( !queue.isEmpty() ) // BFS ALGO BEGIN
+		while( !queue.isEmpty() ) 
 		{
 			int node = queue.remove( 0 );
 			
-			if( gold_placement[ ( int ) node / 10 ][ (int) node % 10 ] == 1 ) // GOLD?
+			if( gold_placement[ ( int ) node / 10 ][ (int) node % 10 ] == 1 ) 
 			{
 				solution_exists = true;
 				break;
 			}
-			else // NO, SO ADD IT'S NEIGHBORS BUT ONLY IF THEY ARE NOT PITS AND HAVEN'T ALREADY BEEN MARKED
+			else 
 			{
 				for ( int i = 0 ; i < BOARD_SIZE*BOARD_SIZE ; i++ )
 				{
@@ -368,16 +359,7 @@ public class EnvironmentSetup
 			}
 		}
 		
-//		for ( int row = 0; row < BOARD_SIZE*BOARD_SIZE; row++ )
-//		{
-//			for ( int col = 0; col < BOARD_SIZE*BOARD_SIZE; col++ )
-//			{
-//				// System.out.print( relationships[row][col] + " " );
-//			}
-//			
-//			// System.out.print( "\n " );
-//		}
-//		
+		
 		
 		return solution_exists;
 	}
@@ -406,262 +388,6 @@ public class EnvironmentSetup
 	public int[][] getPitPlacement(){
 		return pit_placement;
 	}
-	
-	
-	
-	
-//	public void move_left( )
-//	{
-//		int next = 0;
-//		
-//		try
-//		{
-//			next = robot_placement[robo_y][robo_x-1];
-//		}
-//		catch( ArrayIndexOutOfBoundsException e ){ game_lost = true; repaint(); return;  }
-//		
-//		
-//		if ( wumpus_placement[robo_y][robo_x-1] == WUMPUS )
-//		{
-//			game_lost = true;
-//		}
-//		else if ( pit_placement[robo_y][robo_x-1] == PIT )
-//		{
-//			game_lost = true;
-//		}
-//		else if ( gold_placement[robo_y][robo_x-1] == GOLD )
-//		{
-//			has_gold = true;
-//		}
-//		
-//		robot_placement[robo_y][robo_x] = 0;
-//		
-//		robot_placement[robo_y][robo_x-1] = 1;
-//		
-//		robo_x = robo_x-1;	
-//		
-//		if ( has_gold )
-//		{
-//			for( int row = 0 ; row < BOARD_SIZE ; row++ )
-//			{
-//				for( int col = 0 ; col < BOARD_SIZE ; col++ )
-//				{
-//					gold_placement[row][col]= 0;
-//				}
-//			}
-//			
-//			gold_placement[robo_y][robo_x] = 1;
-//		}
-//		
-//		if ( robo_x == HOME_X && robo_y == HOME_Y && has_gold )
-//		{
-//			game_won = true;
-//		}
-//		
-//		repaint();		
-//	}
-//	
-//	public void move_up( )
-//	{
-//		int next = 0;
-//		
-//		try
-//		{
-//			next = robot_placement[robo_y-1][robo_x];
-//		}
-//		catch( ArrayIndexOutOfBoundsException e ){ game_lost = true; repaint(); return;  }
-//		
-//		
-//		if ( wumpus_placement[robo_y-1][robo_x] == WUMPUS )
-//		{
-//			game_lost = true;
-//		}
-//		else if ( pit_placement[robo_y-1][robo_x] == PIT )
-//		{
-//			game_lost = true;
-//		}
-//		else if ( gold_placement[robo_y-1][robo_x] == GOLD )
-//		{
-//			has_gold = true;
-//		}
-//				
-//		robot_placement[robo_y][robo_x] = 0;
-//		
-//		robot_placement[robo_y-1][robo_x] = 2;
-//		
-//		robo_y = robo_y-1;	
-//		
-//		if ( has_gold )
-//		{
-//			for( int row = 0 ; row < BOARD_SIZE ; row++ )
-//			{
-//				for( int col = 0 ; col < BOARD_SIZE ; col++ )
-//				{
-//					gold_placement[row][col]= 0;
-//				}
-//			}
-//			
-//			gold_placement[robo_y][robo_x] = 1;
-//		}
-//		
-//		if ( robo_x == HOME_X && robo_y == HOME_Y && has_gold )
-//		{
-//			game_won = true;
-//		}
-//		
-//		repaint();	
-//	}
-//	
-//	public void move_right( )
-//	{
-//		int next = 0;
-//		
-//		try
-//		{
-//			next = robot_placement[robo_y][robo_x+1];
-//		}
-//		catch( ArrayIndexOutOfBoundsException e ){ game_lost = true; repaint(); return;  }
-//		
-//		
-//		if ( wumpus_placement[robo_y][robo_x+1] == WUMPUS )
-//		{
-//			game_lost = true;
-//		}
-//		else if ( pit_placement[robo_y][robo_x+1] == PIT )
-//		{
-//			game_lost = true;
-//		}
-//		else if ( gold_placement[robo_y][robo_x+1] == GOLD )
-//		{
-//			has_gold = true;
-//		}
-//				
-//		robot_placement[robo_y][robo_x] = 0;
-//		
-//		robot_placement[robo_y][robo_x+1] = 3;
-//		
-//		robo_x = robo_x + 1;	
-//		
-//		if ( has_gold )
-//		{
-//			for( int row = 0 ; row < BOARD_SIZE ; row++ )
-//			{
-//				for( int col = 0 ; col < BOARD_SIZE ; col++ )
-//				{
-//					gold_placement[row][col]= 0;
-//				}
-//			}
-//			
-//			gold_placement[robo_y][robo_x] = 1;
-//		}
-//		
-//		if ( robo_x == HOME_X && robo_y == HOME_Y && has_gold )
-//		{
-//			game_won = true;
-//		}
-//		
-//		repaint();	
-//	}
-//	
-//	public void move_down( )
-//	{
-//		int next = 0;
-//		
-//		try
-//		{
-//			next = robot_placement[robo_y+1][robo_x];
-//		}
-//		catch( ArrayIndexOutOfBoundsException e ){ game_lost = true; repaint(); return;  }
-//		
-//		
-//		if ( wumpus_placement[robo_y+1][robo_x] == WUMPUS )
-//		{
-//			game_lost = true;
-//		}
-//		else if ( pit_placement[robo_y+1][robo_x] == PIT )
-//		{
-//			game_lost = true;
-//		}
-//		else if ( gold_placement[robo_y+1][robo_x] == GOLD )
-//		{
-//			has_gold = true;
-//		}
-//				
-//		robot_placement[robo_y][robo_x] = 0;
-//		
-//		robot_placement[robo_y+1][robo_x] = 4;
-//		
-//		robo_y = robo_y + 1;	
-//		
-//		if ( has_gold )
-//		{
-//			for( int row = 0 ; row < BOARD_SIZE ; row++ )
-//			{
-//				for( int col = 0 ; col < BOARD_SIZE ; col++ )
-//				{
-//					gold_placement[row][col]= 0;
-//				}
-//			}
-//			
-//			gold_placement[robo_y][robo_x] = 1;
-//		}
-//		
-//		if ( robo_x == HOME_X && robo_y == HOME_Y && has_gold )
-//		{
-//			game_won = true;
-//		}
-//		
-//		repaint();	
-//	}
-//	
-//	public void shoot( )
-//	{
-//		arrows -= 1;
-//		
-//		int next = 0;		
-//		int next_x = 0;
-//		int next_y = 0;
-//		
-//		if ( arrows < 0 )
-//		{
-//			arrows = 0;
-//			repaint();
-//			return;
-//		}
-//		
-//		try
-//		{
-//			if ( robot_placement[robo_y][robo_x] == 1 && wumpus_placement[robo_y][robo_x-1] == 1 ) // FACING LEFT
-//			{
-//				wumpus_placement[robo_y][robo_x-1] = 0;
-//				dead_wumpus_placement[robo_y][robo_x-1] = 1;
-//			}
-//			else if ( robot_placement[robo_y][robo_x] == 2 && wumpus_placement[robo_y-1][robo_x] == 1 ) // FACING UP
-//			{
-//				wumpus_placement[robo_y-1][robo_x] = 0;
-//				dead_wumpus_placement[robo_y-1][robo_x] = 1;
-//			}
-//			else if ( robot_placement[robo_y][robo_x] == 3 && wumpus_placement[robo_y][robo_x+1] == 1 ) // FACING RIGHT
-//			{
-//				wumpus_placement[robo_y][robo_x+1] = 0;
-//				dead_wumpus_placement[robo_y][robo_x+1] = 1;
-//			}
-//			else if ( robot_placement[robo_y][robo_x] == 4 && wumpus_placement[robo_y+1][robo_x] == 1 ) // FACING DOWN
-//			{
-//				wumpus_placement[robo_y+1][robo_x] = 0;
-//				dead_wumpus_placement[robo_y+1][robo_x] = 1;
-//			}
-//
-//		}
-//		catch( ArrayIndexOutOfBoundsException e ){ /*System.out.println( "DEBUG: Out of bounds.");*/  }
-//		
-//		repaint();		
-//	}
-	
-//	public void update( )
-//	{
-//		repaint();
-//	}
-	
+
 	
 }

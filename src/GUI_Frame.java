@@ -22,6 +22,7 @@ public class GUI_Frame extends JPanel {
 	private JPanel boardPanel;
 	private final JPanel setupPanel;
 	private final JPanel selectionPanel;
+	private final JPanel selectionPanel2;
 	private final JPanel welcomePanel;
 	private final JPanel startingPanel;
 	
@@ -29,11 +30,14 @@ public class GUI_Frame extends JPanel {
 	private final JButton buttonStart;
 	private final JRadioButton rComputer;
 	private final JRadioButton rHuman;
-	
-	private final ButtonGroup bgDifficulty ;
+	private final JRadioButton rSpecified;
+	private final JRadioButton rRandom;
+	private final ButtonGroup bgDifficulty;
+	private final ButtonGroup bgDifficulty2;
 
 	
 	private final JLabel playWith;
+	private final JLabel playWith2;
 	private final JLabel welcomeMsg;
 
 	private JFrame frame;
@@ -44,13 +48,15 @@ public class GUI_Frame extends JPanel {
 		frame = new JFrame(title);
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.setBackground(Color.white);
-	    frame.setSize(width, height);
+	    frame.setSize(762, 343);
 
 			
 		
 		selectionPanel = new JPanel();
 		selectionPanel.setBounds(0, height/3, width, height/3);
 
+		selectionPanel2 = new JPanel();
+		selectionPanel2.setBounds(0, height/5, width, height/5);
 		
 		welcomePanel = new JPanel();
 		welcomePanel.setBounds(0, 0, width,  height/3);
@@ -59,16 +65,23 @@ public class GUI_Frame extends JPanel {
 		startingPanel.setBounds(0, 2*height/3, width,  height);
 
 		
-		welcomeMsg = new JLabel("    WELCOME TO GOMOKU WORLD   ");
+		welcomeMsg = new JLabel("    WELCOME TO WUMPUS WORLD   ");
 		buttonStart = new JButton("READY SET GOOO!");
 		
 		rComputer = new JRadioButton(" Computer");
-		rHuman = new JRadioButton(" Human");		
+		rHuman = new JRadioButton(" Human");
+		
+		rSpecified = new JRadioButton(" Specified Environment");
+		rRandom = new JRadioButton(" Random Environment");
 		
 		bgDifficulty = new ButtonGroup();
 		bgDifficulty.add(rComputer);
 		bgDifficulty.add(rHuman);
 		rComputer.isSelected();
+		
+		bgDifficulty2 = new ButtonGroup();
+		bgDifficulty2.add(rSpecified);
+		bgDifficulty2.add(rRandom);
 			
 		playWith = new JLabel(" PLAY WITH :  ");
 		
@@ -80,12 +93,21 @@ public class GUI_Frame extends JPanel {
 		selectionPanel.add(rComputer);
 		selectionPanel.add(rHuman);
 		
+		playWith2 = new JLabel(" PLAY WITH :  ");
+		
+		
+		selectionPanel.add(playWith2);
+		selectionPanel.add(rSpecified);
+		selectionPanel.add(rRandom);
+		
 		setupPanel = new JPanel();
 		setupPanel.setLayout(new BoxLayout(setupPanel, BoxLayout.Y_AXIS));
 		
 		setupPanel.add(welcomePanel);
 		setupPanel.add(Box.createVerticalGlue());
 		setupPanel.add(selectionPanel);
+		setupPanel.add(Box.createVerticalGlue());
+		setupPanel.add(selectionPanel2);
 		setupPanel.add(Box.createVerticalGlue());
 		setupPanel.add(startingPanel);
 		
@@ -119,9 +141,5 @@ public class GUI_Frame extends JPanel {
 		validate();
 		frame.pack();
 	}
-	
-//	public void pack() {
-//		frame.pack();
-//	}
 	
 }

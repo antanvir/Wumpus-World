@@ -18,7 +18,7 @@ public class WumpusWorldExplorer {
 	
 	public WumpusWorldExplorer(BoardMaker boardMaker) {
 		
-//		maker = new BoardMaker();
+
 		env = boardMaker.getEnvironment();
 		
 		boardMatrix = env.getBoard();
@@ -28,8 +28,6 @@ public class WumpusWorldExplorer {
 		gold_placement = env.getGoldPlacement();
 		pit_placement = env.getPitPlacement();	
 		
-//		exploreWorld();	
-//		printRoute();
 	}
 	
 	
@@ -56,15 +54,8 @@ public class WumpusWorldExplorer {
 
 		}
 		
-//		for ( int row = 0; row < BOARD_SIZE; row++ )
-//		{
-//			for ( int col = 0; col < BOARD_SIZE; col++ )
-//			{
-//				marked[row][col] = 0;
-//			}
-//		}
 		
-		for ( int row = 0; row < BOARD_SIZE; row++ ) // GENERATE NODE "NAMES"
+		for ( int row = 0; row < BOARD_SIZE; row++ ) 
 		{
 			for ( int col = 0; col < BOARD_SIZE; col++ )
 			{
@@ -73,38 +64,30 @@ public class WumpusWorldExplorer {
 			}
 		}
 		
-//		for ( int row = 0; row < BOARD_SIZE*BOARD_SIZE; row++ )
-//		{
-//			for ( int col = 0; col < BOARD_SIZE*BOARD_SIZE; col++ )
-//			{
-//				relationships[row][col] = 0;
-//				
-//			}
-//		}
 		
-		for ( int row = 0; row < BOARD_SIZE; row++ ) // GENERATE RELATIONSHIP MATRIX
+		for ( int row = 0; row < BOARD_SIZE; row++ ) 
 		{
 			for ( int col = 0; col < BOARD_SIZE; col++ )
 			{
-				try // LEFT Neighbor
+				try 
 				{
 					relationships[ nodes[row][col] ][ nodes[row][col-1]  ] = 1;
 				}
 				catch( ArrayIndexOutOfBoundsException e ){  }
 				
-				try // UP Neighbor
+				try 
 				{
 					relationships[ nodes[row][col] ][ nodes[row-1][col]  ] = 1;
 				}
 				catch( ArrayIndexOutOfBoundsException e ){  }
 				
-				try // RIGHT Neighbor
+				try 
 				{
 					relationships[ nodes[row][col] ][ nodes[row][col+1]  ] = 1;
 				}
 				catch( ArrayIndexOutOfBoundsException e ){  }
 				
-				try // DOWN Neighbor
+				try 
 				{
 					relationships[ nodes[row][col] ][ nodes[row+1][col]  ] = 1;
 				}
@@ -124,7 +107,7 @@ public class WumpusWorldExplorer {
 		
 
 		
-		while( !stack.isEmpty() ) // DFS ALGO BEGIN
+		while( !stack.isEmpty() ) 
 		{
 			int node = stack.get( 0 );					
 			
@@ -133,7 +116,7 @@ public class WumpusWorldExplorer {
 				if ( arrows != 0 )
 				{
 
-//					maker.printSense(arrows, "Something");
+				
 					try
 					{
 						Thread.sleep( sleep );
@@ -146,9 +129,9 @@ public class WumpusWorldExplorer {
 			}
 			
 			
-			if(gold_placement[ ( int ) node / 10 ][ ( int ) node % 10 ] == 1 ) // GOLD?
+			if(gold_placement[ ( int ) node / 10 ][ ( int ) node % 10 ] == 1 ) 
 			{
-//				maker.printSense(arrows, "Something-gold");
+				maker.printSense(arrows, "Something-gold");
 				try
 				{
 					Thread.sleep( sleep );
@@ -157,7 +140,7 @@ public class WumpusWorldExplorer {
 				goldNode = node;
 				break;
 			}
-			else // NO, SO ADD IT'S NEIGHBORS BUT ONLY IF THEY ARE NOT UNMASKED AND HAVEN'T ALREADY BEEN MARKED
+			else 
 			{
 				boolean added = false;
 				
@@ -174,7 +157,9 @@ public class WumpusWorldExplorer {
 						}
 					}
 				}
-				else // ADD RELATIONSHIPS IN REVERSE TO STACK
+				
+				
+				else 
 				{
 					for ( int i = ( BOARD_SIZE*BOARD_SIZE - 1 ) ; i >= 0 ; i-- )
 					{
@@ -192,13 +177,13 @@ public class WumpusWorldExplorer {
 			}
 			
 			node = stack.get( 0 );
-				
-//			maker.printSense(arrows, "Something");
+			
 			try
 			{
 				Thread.sleep( sleep );
 			}
-			catch( InterruptedException x ) {}	
+			catch( InterruptedException x ) {}		
+			
 		}
 	}
 	

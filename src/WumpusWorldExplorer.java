@@ -34,165 +34,124 @@ public class WumpusWorldExplorer {
 	public void exploreWorld( )
 	{
 		
-		int flip_flop = new Random().nextInt( 2 ) ; 
 		
-		ArrayList<Integer> stack = new ArrayList<Integer>();
-		boolean solution_exists = false;
+		System.out.println("HERE I AM!");
+		
+		
+		ArrayList<Integer> queue = new ArrayList<Integer>();
+//		boolean solution_exists = false;
 		
 		int[][] marked = new int[BOARD_SIZE][BOARD_SIZE];
-		int[][] nodes = new int[BOARD_SIZE][BOARD_SIZE];
+		int[][] nodesID = new int[BOARD_SIZE][BOARD_SIZE];
 		int[][] relationships = new int[BOARD_SIZE*BOARD_SIZE][BOARD_SIZE*BOARD_SIZE];
-		
 		parent = new int[BOARD_SIZE*BOARD_SIZE];
-		
-		int node_count = 0;	
-		int sleep = 3000;
+		int node_count = 0;
 		
 		for ( int i = 0; i < BOARD_SIZE*BOARD_SIZE; i++ )
 		{
-			parent[i] = -1;
-
+				parent[i] = -1;
+	
 		}
 		
+		for ( int row = 0; row < BOARD_SIZE; row++ )
+		{
+			for ( int col = 0; col < BOARD_SIZE; col++ )
+			{
+				marked[row][col] = 0;
+			}
+		}
 		
 		for ( int row = 0; row < BOARD_SIZE; row++ ) 
 		{
 			for ( int col = 0; col < BOARD_SIZE; col++ )
 			{
-				nodes[row][col] = node_count;
+				nodesID[row][col] = node_count;
 				node_count += 1;
 			}
 		}
 		
+		for ( int row = 0; row < BOARD_SIZE*BOARD_SIZE; row++ )
+		{
+			for ( int col = 0; col < BOARD_SIZE*BOARD_SIZE; col++ )
+			{
+				relationships[row][col] = 0;
+			}
+		}
 		
 		for ( int row = 0; row < BOARD_SIZE; row++ ) 
 		{
 			for ( int col = 0; col < BOARD_SIZE; col++ )
 			{
-				try 
+				try
 				{
-					relationships[ nodes[row][col] ][ nodes[row][col-1]  ] = 1;
+					relationships[ nodesID[row][col] ][ nodesID[row][col-1]  ] = 1;
 				}
 				catch( ArrayIndexOutOfBoundsException e ){  }
 				
 				try 
 				{
-					relationships[ nodes[row][col] ][ nodes[row-1][col]  ] = 1;
+					relationships[ nodesID[row][col] ][ nodesID[row-1][col]  ] = 1;
 				}
 				catch( ArrayIndexOutOfBoundsException e ){  }
 				
 				try 
 				{
-					relationships[ nodes[row][col] ][ nodes[row][col+1]  ] = 1;
+					relationships[ nodesID[row][col] ][ nodesID[row][col+1]  ] = 1;
 				}
 				catch( ArrayIndexOutOfBoundsException e ){  }
 				
 				try 
 				{
-					relationships[ nodes[row][col] ][ nodes[row+1][col]  ] = 1;
+					relationships[ nodesID[row][col] ][ nodesID[row+1][col]  ] = 1;
 				}
 				catch( ArrayIndexOutOfBoundsException e ){  }				 
 			}
 		}
 		
-		stack.add( 0, nodes[BOARD_SIZE-1][0 ] );
+		queue.add( nodesID[BOARD_SIZE-1][0 ] );
 		marked[BOARD_SIZE-1][0 ] = 1;
 		
-		try
+		while( !queue.isEmpty() ) 
 		{
-			Thread.sleep( sleep );
-		}
-		catch( InterruptedException x ) {}
-		
-		
-
-		
-		while( !stack.isEmpty() ) 
-		{
-			int node = stack.get( 0 );					
+			int node = queue.remove( 0 );
 			
-			if( smell_placement[ ( int ) node / 10 ][ ( int ) node % 10 ] == 1 )
+			if( gold_placement[ ( int ) node / 10 ][ (int) node % 10 ] == 1 ) 
 			{
-				if ( arrows != 0 )
-				{
-
-				
-					try
-					{
-						Thread.sleep( sleep );
-					}
-					catch( InterruptedException x ) {}
-					
-					arrows -= 1;
-					if ( arrows < 0 ) arrows = 0;
-				}
-			}
-			
-			
-			if(gold_placement[ ( int ) node / 10 ][ ( int ) node % 10 ] == 1 ) 
-			{
-				maker.printSense(arrows, "Something-gold");
-				try
-				{
-					Thread.sleep( sleep );
-				}
-				catch( InterruptedException x ) {}
+//				 solution_exists = true;
 				goldNode = node;
 				break;
 			}
 			else 
 			{
-				boolean added = false;
-				
-				if ( flip_flop == 0 ) 
+				for ( int i = 0 ; i < BOARD_SIZE*BOARD_SIZE ; i++ )
 				{
-					for ( int i = 0 ; i < BOARD_SIZE*BOARD_SIZE ; i++ )
+					if ( relationships[node][i] == 1 && pit_placement[ ( int ) i / 10 ][ (int) i % 10 ] != 1 && marked[ ( int ) i / 10 ][ (int) i % 10 ] != 1 )
 					{
-						if ( relationships[node][i] == 1 && pit_placement[ ( int ) i / 10 ][ (int) i % 10 ] != 1 && marked[ ( int ) i / 10 ][ (int) i % 10 ] != 1 )
-						{
-							stack.add( 0,  nodes[ ( int ) i / 10 ][ (int) i % 10 ] );
-							marked[ ( int ) i / 10 ][ (int) i % 10 ] = 1;
-							added = true;
-							parent[ nodes[ ( int ) i / 10 ][ (int) i % 10 ]] = node;
-						}
+						System.out.println("HERE I AM!");
+						queue.add( nodesID[ ( int ) i / 10 ][ (int) i % 10 ] );
+						marked[ ( int ) i / 10 ][ (int) i % 10 ] = 1;
+						parent[ nodesID[ ( int ) i / 10 ][ (int) i % 10 ]] = node;
 					}
 				}
-				
-				
-				else 
-				{
-					for ( int i = ( BOARD_SIZE*BOARD_SIZE - 1 ) ; i >= 0 ; i-- )
-					{
-						if ( relationships[node][i] == 1 && pit_placement[ ( int ) i / 10 ][ (int) i % 10 ] != 1 && marked[ ( int ) i / 10 ][ (int) i % 10 ] != 1 )
-						{
-							stack.add( 0,  nodes[ ( int ) i / 10 ][ (int) i % 10 ] );
-							marked[ ( int ) i / 10 ][ (int) i % 10 ] = 1;
-							added = true;
-							parent[ nodes[ ( int ) i / 10 ][ (int) i % 10 ]] = node;
-						}
-					}
-				}
-				
-				if ( !added ) stack.remove( 0 );
 			}
-			
-			node = stack.get( 0 );
-			
-			try
-			{
-				Thread.sleep( sleep );
-			}
-			catch( InterruptedException x ) {}		
-			
 		}
+		
+		
+		printRoute();
+		
+		
 	}
 	
 	public void printRoute() {
+		System.out.println();
+		System.out.println("HERE IN PRINT ROUTE");
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		int node = goldNode;
+		System.out.println(goldNode);
 		while(node != -1) {
 			list.add(node);
 			node = parent[node];
+			System.out.println("HERE!!!");
 		}
 		
 		Collections.reverse(list);

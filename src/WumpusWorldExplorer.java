@@ -35,116 +35,7 @@ public class WumpusWorldExplorer {
 	}
 	
 	
-//	public void exploreWorld( )
-//	{
-//		
-//		
-//		System.out.println("HERE I AM!");
-//		
-//		
-//		ArrayList<Integer> queue = new ArrayList<Integer>();
-////		boolean solution_exists = false;
-//		
-//		int[][] marked = new int[BOARD_SIZE][BOARD_SIZE];
-//		int[][] nodesID = new int[BOARD_SIZE][BOARD_SIZE];
-//		int[][] relationships = new int[BOARD_SIZE*BOARD_SIZE][BOARD_SIZE*BOARD_SIZE];
-//		parent = new int[BOARD_SIZE*BOARD_SIZE];
-//		int node_count = 0;
-//		
-//		for ( int i = 0; i < BOARD_SIZE*BOARD_SIZE; i++ )
-//		{
-//				parent[i] = -1;
-//	
-//		}
-//		
-//		for ( int row = 0; row < BOARD_SIZE; row++ )
-//		{
-//			for ( int col = 0; col < BOARD_SIZE; col++ )
-//			{
-//				marked[row][col] = 0;
-//			}
-//		}
-//		
-//		for ( int row = 0; row < BOARD_SIZE; row++ ) 
-//		{
-//			for ( int col = 0; col < BOARD_SIZE; col++ )
-//			{
-//				nodesID[row][col] = node_count;
-//				node_count += 1;
-//			}
-//		}
-//		
-//		for ( int row = 0; row < BOARD_SIZE*BOARD_SIZE; row++ )
-//		{
-//			for ( int col = 0; col < BOARD_SIZE*BOARD_SIZE; col++ )
-//			{
-//				relationships[row][col] = 0;
-//			}
-//		}
-//		
-//		for ( int row = 0; row < BOARD_SIZE; row++ ) 
-//		{
-//			for ( int col = 0; col < BOARD_SIZE; col++ )
-//			{
-//				try
-//				{
-//					relationships[ nodesID[row][col] ][ nodesID[row][col-1]  ] = 1;
-//				}
-//				catch( ArrayIndexOutOfBoundsException e ){  }
-//				
-//				try 
-//				{
-//					relationships[ nodesID[row][col] ][ nodesID[row-1][col]  ] = 1;
-//				}
-//				catch( ArrayIndexOutOfBoundsException e ){  }
-//				
-//				try 
-//				{
-//					relationships[ nodesID[row][col] ][ nodesID[row][col+1]  ] = 1;
-//				}
-//				catch( ArrayIndexOutOfBoundsException e ){  }
-//				
-//				try 
-//				{
-//					relationships[ nodesID[row][col] ][ nodesID[row+1][col]  ] = 1;
-//				}
-//				catch( ArrayIndexOutOfBoundsException e ){  }				 
-//			}
-//		}
-//		
-//		queue.add( nodesID[BOARD_SIZE-1][0 ] );
-//		marked[BOARD_SIZE-1][0 ] = 1;
-//		
-//		while( !queue.isEmpty() ) 
-//		{
-//			int node = queue.remove( 0 );
-//			
-//			if( gold_placement[ ( int ) node / 10 ][ (int) node % 10 ] == 1 ) 
-//			{
-////				 solution_exists = true;
-//				goldNode = node;
-//				break;
-//			}
-//			else 
-//			{
-//				for ( int i = 0 ; i < BOARD_SIZE*BOARD_SIZE ; i++ )
-//				{
-//					if ( relationships[node][i] == 1 && pit_placement[ ( int ) i / 10 ][ (int) i % 10 ] != 1 && marked[ ( int ) i / 10 ][ (int) i % 10 ] != 1 )
-//					{
-//						System.out.println("HERE I AM!");
-//						queue.add( nodesID[ ( int ) i / 10 ][ (int) i % 10 ] );
-//						marked[ ( int ) i / 10 ][ (int) i % 10 ] = 1;
-//						parent[ nodesID[ ( int ) i / 10 ][ (int) i % 10 ]] = node;
-//					}
-//				}
-//			}
-//		}
-//		
-//		
-//		printRoute();
-//		
-//		
-//	}
+
 	
 	public void startExploring(){
 		
@@ -197,30 +88,7 @@ public class WumpusWorldExplorer {
 				}
 				else relationships[ nodesID[row][col] ][ 3 ] = -1;
 				
-				
-//				try
-//				{
-//					relationships[ nodesID[row][col] ][ 0 ] = nodesID[row -1][col];
-//				}
-//				catch( ArrayIndexOutOfBoundsException e ){  }
-				
-//				try
-//				{
-//					relationships[ nodesID[row][col] ][ 1 ] = nodesID[row][col-1];
-//				}
-//				catch( ArrayIndexOutOfBoundsException e ){  }
-				
-//				try
-//				{
-//					relationships[ nodesID[row][col] ][ 2 ] = nodesID[row][col+1];
-//				}
-//				catch( ArrayIndexOutOfBoundsException e ){  }
-//				
-//				try
-//				{
-//					relationships[ nodesID[row][col] ][ 3 ] = nodesID[row+1][col];
-//				}
-//				catch( ArrayIndexOutOfBoundsException e ){  }
+
 			}
 		}
 		
@@ -253,12 +121,13 @@ public class WumpusWorldExplorer {
 		}
 		
 		visited[9][0] = 1;
-		count++;
+//		count++;
 		dfsExplore(curNodeID);
 		
 	}
 	
 	public void dfsExplore(int curNodeID) {
+		System.out.println();
 		if(GAME_OVER) {
 			return;
 		}
@@ -307,6 +176,7 @@ public class WumpusWorldExplorer {
 			adjNodeID = relationships[curNodeID][i];
 			if(adjNodeID == -1 || visited[adjNodeID / 10][adjNodeID % 10] == 1) continue;
 			
+			
 			boolean PIT_ENTAILED_IN_THIS_MOVE = false, WUMPUS_ENTAILED_IN_THIS_MOVE = false;
 			
 			if(BREEZE && pit_possibility[adjNodeID / 10][adjNodeID % 10] != 0) {
@@ -325,6 +195,7 @@ public class WumpusWorldExplorer {
 			else {
 				pit_possibility[adjNodeID / 10][adjNodeID % 10] = 0;
 			}
+			
 			
 			if(SMELL && wumpus_possibility[adjNodeID / 10][adjNodeID % 10] != 0) {
 				if(wumpus_possibility[adjNodeID / 10][adjNodeID % 10] == -1 && pit_possibility[adjNodeID / 10][adjNodeID % 10] == 1) {
@@ -369,75 +240,126 @@ public class WumpusWorldExplorer {
 		}		
 		
 		if(NumOfSafeCell > 0) {
-			for(int j = 0; j < NumOfSafeCell; j++) {
-				parent[safeCell[j]] = curNodeID;
-				visited[ safeCell[j] / 10 ][ safeCell[j] % 10 ] = 1;
-				count++;
-				if(count<=80)dfsExplore(safeCell[j]);
-//				dfsExplore(safeCell[j]);
-				
-//				if(!GAME_OVER) {
-//					printSense(arrows, "[DECISION]: --Stepping Back--");
-//					drawWumpusWorldEnvironment(safeCell[j] / 10, safeCell[j] % 10);
-//					try {
-//						Thread.sleep(SLEEP);
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
+			for(int k = 0; k < NumOfSafeCell; k++) {
+				parent[safeCell[k]] = curNodeID;
+				visited[ safeCell[k] / 10 ][ safeCell[k] % 10 ] = 1;
+
+//				if(count<=80)dfsExplore(safeCell[j]);
+				dfsExplore(safeCell[k]);
+//				count++;
+//				if(count >= 3 && !GAME_OVER) {
+//					count = 0;
+//					if(NumOfUnsafeCell > 0) {
+//						int riskyNodeID = -1;
+//						for(int j = 0; j < NumOfUnsafeCell; j++) {
+//							if(wumpus_possibility[ unsafeCell[j] / 10 ][ unsafeCell[j] % 10 ] == 2) {
+//								riskyNodeID = unsafeCell[j];
+//								String side = "";
+//								if(riskyNodeID == curNodeID-1) side += "LEFT";
+//								else if(riskyNodeID == curNodeID+1) side += "RIGHT";
+//								else if(riskyNodeID == curNodeID-10) side += "UP";
+//								else if(riskyNodeID == curNodeID+10) side += "DOWN";
+////								arrows--;
+////								printSense(arrows, "[DECISION]: WUMPUS should be in "+side+"-Throw Arrow-");
+//								break;
+//							}					
+//						}
+//						if(riskyNodeID == -1) {		
+//							do {
+//								Random rand = new Random();
+//								int x = rand.nextInt( NumOfUnsafeCell );
+//								riskyNodeID = unsafeCell[x];
+//							}while(pit_possibility[ riskyNodeID / 10 ][ riskyNodeID % 10 ] == 2);
+//							String side = "";
+//							if(riskyNodeID == curNodeID-1) side += "LEFT";
+//							else if(riskyNodeID == curNodeID+1) side += "RIGHT";
+//							else if(riskyNodeID == curNodeID-10) side += "UP";
+//							else if(riskyNodeID == curNodeID+10) side += "DOWN";
+//							if(SMELL) {	
+//								if(wumpus_placement[ riskyNodeID / 10 ][ riskyNodeID % 10 ] == 1) {
+//									System.out.println("Node: "+riskyNodeID+"\n ** WUMPUS DEAD! **");
+//								}
+////								arrows--;
+////								printSense(arrows, "[DECISION]: Moving "+side+"-Throwing Arrow for safety-");
+////								try {
+////								Thread.sleep(SLEEP - 200);
+////								} catch (InterruptedException e) {
+////									e.printStackTrace();
+////								}
+////								printSense(arrows, "[SENSE]: ** WUMPUS DEAD **");
+//							}
+//							else {
+////								printSense(arrows, "[DECISION]: -Taking RISK- Moving "+side);
+//							}
+//							
+//						}
+//						parent[riskyNodeID] = curNodeID;
+//						visited[ riskyNodeID / 10 ][ riskyNodeID % 10 ] = 1;
+////						if(count<=20)dfsExplore(riskyNodeID);
+//						dfsExplore(riskyNodeID);
 //					}
 //				}
-			}
-		}
-		
-//		else {
-//			int riskyNodeID = -1;
-//			for(int j = 0; j < NumOfUnsafeCell; j++) {
-//				if(wumpus_possibility[ unsafeCell[j] / 10 ][ unsafeCell[j] % 10 ] == 2) {
-//					riskyNodeID = unsafeCell[j];
-//					String side = "";
-//					if(riskyNodeID == curNodeID-1) side += "LEFT";
-//					else if(riskyNodeID == curNodeID+1) side += "RIGHT";
-//					else if(riskyNodeID == curNodeID-10) side += "UP";
-//					else if(riskyNodeID == curNodeID+10) side += "DOWN";
-////					arrows--;
-////					printSense(arrows, "[DECISION]: WUMPUS should be in "+side+"-Throw Arrow-");
-//					break;
-//				}					
-//			}
-//			if(riskyNodeID == -1) {		
-//				do {
-//					Random rand = new Random();
-//					int x = rand.nextInt( NumOfUnsafeCell );
-//					riskyNodeID = unsafeCell[x];
-//				}while(pit_possibility[ riskyNodeID / 10 ][ riskyNodeID % 10 ] == 2);
-//				String side = "";
-//				if(riskyNodeID == curNodeID-1) side += "LEFT";
-//				else if(riskyNodeID == curNodeID+1) side += "RIGHT";
-//				else if(riskyNodeID == curNodeID-10) side += "UP";
-//				else if(riskyNodeID == curNodeID+10) side += "DOWN";
-//				if(SMELL) {	
-//					if(wumpus_placement[ riskyNodeID / 10 ][ riskyNodeID % 10 ] == 1) {
-//						System.out.println("Node: "+riskyNodeID+"\n ** WUMPUS DEAD! **");
-//					}
-////					arrows--;
-////					printSense(arrows, "[DECISION]: Moving "+side+"-Throwing Arrow for safety-");
+////				if(!GAME_OVER) {
+////					printSense(arrows, "[DECISION]: --Stepping Back--");
+////					drawWumpusWorldEnvironment(safeCell[j] / 10, safeCell[j] % 10);
 ////					try {
-////					Thread.sleep(SLEEP - 200);
+////						Thread.sleep(SLEEP);
 ////					} catch (InterruptedException e) {
 ////						e.printStackTrace();
 ////					}
-////					printSense(arrows, "[SENSE]: ** WUMPUS DEAD **");
-//				}
-//				else {
-////					printSense(arrows, "[DECISION]: -Taking RISK- Moving "+side);
-//				}
-//				
-//			}
-//			parent[riskyNodeID] = curNodeID;
-//			visited[ riskyNodeID / 10 ][ riskyNodeID % 10 ] = 1;
-//			count++;
+////				}
+			}
+		}
+		
+		else if(NumOfUnsafeCell > 0) {
+			int riskyNodeID = -1;
+			for(int j = 0; j < NumOfUnsafeCell; j++) {
+				if(wumpus_possibility[ unsafeCell[j] / 10 ][ unsafeCell[j] % 10 ] == 2) {
+					riskyNodeID = unsafeCell[j];
+					String side = "";
+					if(riskyNodeID == curNodeID-1) side += "LEFT";
+					else if(riskyNodeID == curNodeID+1) side += "RIGHT";
+					else if(riskyNodeID == curNodeID-10) side += "UP";
+					else if(riskyNodeID == curNodeID+10) side += "DOWN";
+//					arrows--;
+//					printSense(arrows, "[DECISION]: WUMPUS should be in "+side+"-Throw Arrow-");
+					break;
+				}					
+			}
+			if(riskyNodeID == -1) {		
+				do {
+					Random rand = new Random();
+					int x = rand.nextInt( NumOfUnsafeCell );
+					riskyNodeID = unsafeCell[x];
+				}while(pit_possibility[ riskyNodeID / 10 ][ riskyNodeID % 10 ] == 2);
+				String side = "";
+				if(riskyNodeID == curNodeID-1) side += "LEFT";
+				else if(riskyNodeID == curNodeID+1) side += "RIGHT";
+				else if(riskyNodeID == curNodeID-10) side += "UP";
+				else if(riskyNodeID == curNodeID+10) side += "DOWN";
+				if(SMELL) {	
+					if(wumpus_placement[ riskyNodeID / 10 ][ riskyNodeID % 10 ] == 1) {
+						System.out.println("Node: "+riskyNodeID+"\n ** WUMPUS DEAD! **");
+					}
+//					arrows--;
+//					printSense(arrows, "[DECISION]: Moving "+side+"-Throwing Arrow for safety-");
+//					try {
+//					Thread.sleep(SLEEP - 200);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//					printSense(arrows, "[SENSE]: ** WUMPUS DEAD **");
+				}
+				else {
+//					printSense(arrows, "[DECISION]: -Taking RISK- Moving "+side);
+				}
+				
+			}
+			parent[riskyNodeID] = curNodeID;
+			visited[ riskyNodeID / 10 ][ riskyNodeID % 10 ] = 1;
 //			if(count<=20)dfsExplore(riskyNodeID);
-////			dfsExplore(riskyNodeID);
-//		}
+			dfsExplore(riskyNodeID);
+		}
 	}
 	
 	

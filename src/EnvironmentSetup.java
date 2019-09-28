@@ -100,7 +100,7 @@ public class EnvironmentSetup
 				int x = rand.nextInt( 100 );
 				int row = x / 10;
 				int col = x % 10;
-				if ( row == ( BOARD_SIZE - 1 ) && col == 0 ) {
+				if (  (row == BOARD_SIZE-1 && (col == 0 || col == 1)) || (row == BOARD_SIZE-2  && col == 0 )  ) {
 					i --;
 					continue;				
 				}
@@ -112,7 +112,7 @@ public class EnvironmentSetup
 				int x = rand.nextInt( 100 );
 				int row = x / 10;
 				int col = x % 10;
-				if ( row == ( BOARD_SIZE - 1 ) && col == 0 ){
+				if (  (row == BOARD_SIZE-1 && (col == 0 || col == 1)) || (row == BOARD_SIZE-2  && col == 0 )  ){
 					i --;
 					continue;				
 				}

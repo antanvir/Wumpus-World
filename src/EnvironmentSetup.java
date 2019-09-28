@@ -68,9 +68,7 @@ public class EnvironmentSetup
 		
 		board = new int [10][10];
 		
-		do
-		{
-		
+		do{		
 			Random rand = new Random();
 			
 			pit_placement = new int [10][10];
@@ -142,8 +140,7 @@ public class EnvironmentSetup
 
 			}
 			
-		}
-		while( !bfs( ) );
+		}while( !bfs( ) );
 		
 		for ( int row = 0; row < BOARD_SIZE; row++ )
 		{
@@ -385,6 +382,10 @@ public class EnvironmentSetup
 	
 	public int[][] getPitPlacement(){
 		return pit_placement;
+	}
+	
+	public int[][] getWumpusPlacement(){
+		return wumpus_placement;
 	}
 
 	

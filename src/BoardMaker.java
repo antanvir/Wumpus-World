@@ -77,19 +77,41 @@ public class BoardMaker {
 		return gui.getEnvironment();
 	}
 	
-	public int getRelativePos(int x, boolean isWidth) {
-		return gui.getRelativePos(x, isWidth);
-	}
-	
-	
-	public void printWinner(int winner, String text) {
-		gui.printWinner(winner, text);
-	}
+//	public int getRelativePos(int x, boolean isWidth) {
+//		return gui.getRelativePos(x, isWidth);
+//	}
+//	
+//	
+//	public void printWinner(int winner, String text) {
+//		gui.printWinner(winner, text);
+//	}
 	
 	
 	public void printSense(int arrows, String text) {
 		gui.printSense(arrows, text);
 	}
+	
+	public void drawWumpusWorldEnvironment(int robotPosY, int robotPosX) {
+		gui.drawWumpusWorldEnvironment(robotPosY, robotPosX);
+	}
+	
+	public void set_Game_WON(boolean flag) {
+		gui.set_Game_WON(flag);
+	}
+	
+	public void set_Game_LOST(boolean flag) {
+		gui.set_Game_LOST(flag);
+	}
+	
+	public void set_Has_GOLD(boolean flag) {
+		gui.set_Has_GOLD(flag);
+	}
+	
+	public void set_Reached_HOME(boolean flag) {
+		gui.set_Reached_HOME(flag);		 
+	}
+	
+	
 	
 	
 }

@@ -37,6 +37,7 @@ public class MainClass {
 				WumpusWorldExplorer game = new WumpusWorldExplorer(board);
 				game.startExploring();
 //				game.printRoute();
+//				game.setupGUI(board);
 				
 //				if(playingWithComputer) {
 //

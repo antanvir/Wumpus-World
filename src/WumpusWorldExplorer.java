@@ -6,7 +6,7 @@ public class WumpusWorldExplorer {
 	
 	private EnvironmentSetup env;
 	private BoardGUI gui;
-	private BoardMaker maker;
+	private BoardMaker boardMaker;
 	private int[][] boardMatrix, markedRoute, breeze_placement, pit_placement,
 			glitter_placement, smell_placement, gold_placement, wumpus_placement;	
 	private int[] parent, marked;	
@@ -22,7 +22,7 @@ public class WumpusWorldExplorer {
 	
 	
 	public WumpusWorldExplorer(BoardMaker boardMaker) {
-		
+		setupBoardMaker(boardMaker);
 		env = boardMaker.getEnvironment();
 		
 		boardMatrix = env.getBoard();
@@ -123,24 +123,33 @@ public class WumpusWorldExplorer {
 		visited[9][0] = 1;
 //		count++;
 		dfsExplore(curNodeID);
+//		printRoute();
+		boardMaker.set_Game_WON(true);
+//		printSense(arrows, "[SENSE]: sense);
 		
 	}
 	
 	public void dfsExplore(int curNodeID) {
+		String sense = "";
 		System.out.println();
 		if(GAME_OVER) {
 			return;
 		}
 		if(pit_placement[curNodeID / 10][curNodeID % 10] == 1 && wumpus_placement[curNodeID / 10][curNodeID % 10] == 1) {
-//			printSense(arrows, "[SENSE]: sense);
-			System.out.println("Node: "+curNodeID+"\n ** GAME LOST! DEAD! **");
+			sense = "** DEAD! GAME LOST! **";
+			boardMaker.printSense(arrows, "[SENSE]: " + sense);
+			System.out.println("Node: "+curNodeID+"\n ** DEAD! **");
+			boardMaker.set_Game_LOST(true);
 			GAME_OVER = true;
 			return;
 		}
 		
 		if(gold_placement[curNodeID / 10][curNodeID % 10] == 1) {
 //			printSense(arrows, "[SENSE]: sense);
-			System.out.println("Node: "+curNodeID+"\n ** GAME WON **");
+			sense = "** GOT GOLD **";
+			boardMaker.printSense(arrows, "[SENSE]: " + sense);
+			System.out.println("Node: "+curNodeID+"\n ** GOT GOLD **");
+			boardMaker.set_Has_GOLD(true);
 			GAME_OVER = true;
 			return;
 		}
@@ -153,19 +162,18 @@ public class WumpusWorldExplorer {
 			SMELL = true;
 		}
 		
-		String sense = "";
 		if(BREEZE) sense += "-Breeze-";
 		if(SMELL) sense += "-Breeze-";
 		if(!BREEZE && !SMELL) sense += "-OK--No Risk-";
 		
 		System.out.println("Node: "+curNodeID+"\n[SENSE]: " +sense);
-//		printSense(arrows, "[SENSE]: sense);
-//		drawWumpusWorldEnvironment(safeCell[j] / 10, safeCell[j] % 10);
-//		try {
-//			Thread.sleep(SLEEP);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
+		boardMaker.printSense(arrows, "[SENSE]: " + sense);
+		boardMaker.drawWumpusWorldEnvironment(curNodeID / 10, curNodeID % 10);
+		try {
+			Thread.sleep(SLEEP);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
 		ArrayList<Integer> safeList = new ArrayList<Integer>();
 		ArrayList<Integer> unsafeList = new ArrayList<Integer>();
@@ -181,8 +189,10 @@ public class WumpusWorldExplorer {
 			
 			if(BREEZE && pit_possibility[adjNodeID / 10][adjNodeID % 10] != 0) {
 				if(pit_possibility[adjNodeID / 10][adjNodeID % 10] == -1 && wumpus_possibility[adjNodeID / 10][adjNodeID % 10] == 1) {
-					pit_possibility[adjNodeID / 10][adjNodeID % 10] = -1;
-					wumpus_possibility[adjNodeID / 10][adjNodeID % 10] = -1;
+//					pit_possibility[adjNodeID / 10][adjNodeID % 10] = -1;
+//					wumpus_possibility[adjNodeID / 10][adjNodeID % 10] = -1;
+					pit_possibility[adjNodeID / 10][adjNodeID % 10] = 0;
+					wumpus_possibility[adjNodeID / 10][adjNodeID % 10] = 0;
 				}
 				else {
 					if (pit_possibility[adjNodeID / 10][adjNodeID % 10] == 1) PIT_ENTAILED_IN_THIS_MOVE = false;
@@ -204,8 +214,11 @@ public class WumpusWorldExplorer {
 						wumpus_possibility[adjNodeID / 10][adjNodeID % 10] = 1;
 					}
 					else {
-						pit_possibility[adjNodeID / 10][adjNodeID % 10] = -1;
-						wumpus_possibility[adjNodeID / 10][adjNodeID % 10] = -1;
+//						pit_possibility[adjNodeID / 10][adjNodeID % 10] = -1;
+//						wumpus_possibility[adjNodeID / 10][adjNodeID % 10] = -1;
+						pit_possibility[adjNodeID / 10][adjNodeID % 10] = 0;
+						wumpus_possibility[adjNodeID / 10][adjNodeID % 10] = 0;
+						
 					}
 				}
 				else {
@@ -299,15 +312,15 @@ public class WumpusWorldExplorer {
 //						dfsExplore(riskyNodeID);
 //					}
 //				}
-////				if(!GAME_OVER) {
-////					printSense(arrows, "[DECISION]: --Stepping Back--");
-////					drawWumpusWorldEnvironment(safeCell[j] / 10, safeCell[j] % 10);
-////					try {
-////						Thread.sleep(SLEEP);
-////					} catch (InterruptedException e) {
-////						e.printStackTrace();
-////					}
-////				}
+				if(!GAME_OVER) {
+					boardMaker.printSense(arrows, "[DECISION]: --Stepping Back--");
+					boardMaker.drawWumpusWorldEnvironment(safeCell[k] / 10, safeCell[k] % 10);
+					try {
+						Thread.sleep(SLEEP);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 		
@@ -338,22 +351,28 @@ public class WumpusWorldExplorer {
 				else if(riskyNodeID == curNodeID-10) side += "UP";
 				else if(riskyNodeID == curNodeID+10) side += "DOWN";
 				if(SMELL) {	
+					arrows--;
+					boardMaker.printSense(arrows, "[DECISION]: Moving "+side+"-Throwing Arrow for safety-");
+					try {
+						Thread.sleep(SLEEP - 200);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					
 					if(wumpus_placement[ riskyNodeID / 10 ][ riskyNodeID % 10 ] == 1) {
 						System.out.println("Node: "+riskyNodeID+"\n ** WUMPUS DEAD! **");
+						boardMaker.printSense(arrows, "[SENSE]: ** WUMPUS DEAD **");
 					}
-//					arrows--;
-//					printSense(arrows, "[DECISION]: Moving "+side+"-Throwing Arrow for safety-");
-//					try {
-//					Thread.sleep(SLEEP - 200);
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//					printSense(arrows, "[SENSE]: ** WUMPUS DEAD **");
 				}
 				else {
-//					printSense(arrows, "[DECISION]: -Taking RISK- Moving "+side);
+					boardMaker.printSense(arrows, "[DECISION]: -Taking RISK- Moving "+side);
 				}
 				
+			}
+			try {
+				Thread.sleep(SLEEP - 200);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 			parent[riskyNodeID] = curNodeID;
 			visited[ riskyNodeID / 10 ][ riskyNodeID % 10 ] = 1;
@@ -383,6 +402,10 @@ public class WumpusWorldExplorer {
 		}  
 	
 		System.out.println(); 
+	}
+	
+	public void setupBoardMaker(BoardMaker board) {
+		this.boardMaker = board;
 	}
 	
 }

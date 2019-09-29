@@ -166,6 +166,7 @@ public class BoardGUI extends JPanel {
 			g2D.setColor( Color.GREEN );
 			g2D.drawString("GOT THE JACKPOT!!", getWidth()/2 - 180, getHeight()/2 - 50 );
 		}
+		repaint();
 		
 	}
 	
@@ -231,7 +232,7 @@ public class BoardGUI extends JPanel {
 		
 		
 		
-//		repaint();
+		repaint();
 		
 	}
 	

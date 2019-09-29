@@ -22,7 +22,7 @@ public class WumpusWorldExplorer {
 	
 	
 	public WumpusWorldExplorer(BoardMaker boardMaker) {
-		setupBoardMaker(boardMaker);
+		this.setupBoardMaker(boardMaker);
 		env = boardMaker.getEnvironment();
 		
 		boardMatrix = env.getBoard();

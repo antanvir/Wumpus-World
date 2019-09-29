@@ -236,77 +236,77 @@ public class BoardGUI extends JPanel {
 		
 	}
 	
-	public int getRelativePos(int x, boolean isWidth) {
-		if(x >= boardWidth) x = boardWidth-1;
-		
-		if(isWidth)
-			return (int) ( x * totalCell / boardWidth );
-		else
-			return (int) ( (x+80) * totalCell / boardWidth );
-	}
-	
-	
-	public Dimension getPreferredSize() {
-		return new Dimension(boardWidth, boardWidth+100);
-	}
-	
-	
-	public void printWinner(int winner, String text) {
-		FontMetrics metrics = g2D.getFontMetrics(g2D.getFont());		
-		
-		g2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-   			 				 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		g2D.setFont(new Font(g2D.getFont().getName(), Font.PLAIN, 48));
-		
-		g2D.setColor(Color.black);
-		int x = (boardWidth/2 - metrics.stringWidth(text)*2);
-		int y = boardWidth/2;
-		
-
-		
-		g2D.setColor(winner == 2 ? Color.green : (winner == 1 ? Color.red : Color.blue));
-		
-		g2D.drawString(text,x,y);
-		
-		repaint();
-		
-	}
-	
-	
-	public void drawStone(int posX, int posY, boolean human) {
-		
-		if(posX >= totalCell || posY >= totalCell) return;
-		
-		
-		
-		g2D.setColor(human ? Color.green : Color.orange);
-		g2D.fillOval((int)(cellLength*(posX+0.2)), 
-					 (int)(cellLength*(posY+0.2)), 
-					 (int)(cellLength*0.7), 
-					 (int)(cellLength*0.7));
-		
-		g2D.setColor(Color.blue);
-		g2D.setStroke(new BasicStroke((float)1.5));
-		g2D.drawOval((int)(cellLength*(posX+0.2)), 
-					 (int)(cellLength*(posY+0.2)), 
-					 (int)(cellLength*0.7), 
-					 (int)(cellLength*0.7));
-		
-		try {
-			Thread.sleep(600);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		g2D.setColor(Color.black);
-		g2D.setStroke(new BasicStroke(2));
-		g2D.drawOval((int)(cellLength*(posX+0.2)), 
-					 (int)(cellLength*(posY+0.2)), 
-					 (int)(cellLength*0.7), 
-					 (int)(cellLength*0.7));
-		
-		repaint();
-	}
+//	public int getRelativePos(int x, boolean isWidth) {
+//		if(x >= boardWidth) x = boardWidth-1;
+//		
+//		if(isWidth)
+//			return (int) ( x * totalCell / boardWidth );
+//		else
+//			return (int) ( (x+80) * totalCell / boardWidth );
+//	}
+//	
+//	
+//	public Dimension getPreferredSize() {
+//		return new Dimension(boardWidth, boardWidth+100);
+//	}
+//	
+//	
+//	public void printWinner(int winner, String text) {
+//		FontMetrics metrics = g2D.getFontMetrics(g2D.getFont());		
+//		
+//		g2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+//   			 				 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+//		g2D.setFont(new Font(g2D.getFont().getName(), Font.PLAIN, 48));
+//		
+//		g2D.setColor(Color.black);
+//		int x = (boardWidth/2 - metrics.stringWidth(text)*2);
+//		int y = boardWidth/2;
+//		
+//
+//		
+//		g2D.setColor(winner == 2 ? Color.green : (winner == 1 ? Color.red : Color.blue));
+//		
+//		g2D.drawString(text,x,y);
+//		
+//		repaint();
+//		
+//	}
+//	
+//	
+//	public void drawStone(int posX, int posY, boolean human) {
+//		
+//		if(posX >= totalCell || posY >= totalCell) return;
+//		
+//		
+//		
+//		g2D.setColor(human ? Color.green : Color.orange);
+//		g2D.fillOval((int)(cellLength*(posX+0.2)), 
+//					 (int)(cellLength*(posY+0.2)), 
+//					 (int)(cellLength*0.7), 
+//					 (int)(cellLength*0.7));
+//		
+//		g2D.setColor(Color.blue);
+//		g2D.setStroke(new BasicStroke((float)1.5));
+//		g2D.drawOval((int)(cellLength*(posX+0.2)), 
+//					 (int)(cellLength*(posY+0.2)), 
+//					 (int)(cellLength*0.7), 
+//					 (int)(cellLength*0.7));
+//		
+//		try {
+//			Thread.sleep(600);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		g2D.setColor(Color.black);
+//		g2D.setStroke(new BasicStroke(2));
+//		g2D.drawOval((int)(cellLength*(posX+0.2)), 
+//					 (int)(cellLength*(posY+0.2)), 
+//					 (int)(cellLength*0.7), 
+//					 (int)(cellLength*0.7));
+//		
+//		repaint();
+//	}
 	
 	
 	public EnvironmentSetup getEnvironment() {
@@ -350,9 +350,9 @@ public class BoardGUI extends JPanel {
 	
 	
 	
-	public void attachListener(MouseListener listener) {
-		addMouseListener(listener);
-	}
+//	public void attachListener(MouseListener listener) {
+//		addMouseListener(listener);
+//	}
 	
 	
 	public void set_Game_WON(boolean flag) {

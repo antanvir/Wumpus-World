@@ -36,26 +36,26 @@ public class BoardMaker {
 	}
 	
 	
-	public void startListening(MouseListener listener) {
-		gui.attachListener(listener);
-	}
+//	public void startListening(MouseListener listener) {
+//		gui.attachListener(listener);
+//	}
 	
 	
-	public void addStoneNoGUI(int posX, int posY, boolean human) {
-		boardMatrix[posY][posX] = human ? 2 : 1;
-	}
-	
-	
-	public boolean addStone(int posX, int posY, boolean human) {
-		
-		if(boardMatrix[posY][posX] != 0) return false;
-		
-		gui.drawStone(posX, posY, human);
-		boardMatrix[posY][posX] = human ? 2 : 1;
-		return true;
-		
-	}
-	
+//	public void addStoneNoGUI(int posX, int posY, boolean human) {
+//		boardMatrix[posY][posX] = human ? 2 : 1;
+//	}
+//	
+//	
+//	public boolean addStone(int posX, int posY, boolean human) {
+//		
+//		if(boardMatrix[posY][posX] != 0) return false;
+//		
+//		gui.drawStone(posX, posY, human);
+//		boardMatrix[posY][posX] = human ? 2 : 1;
+//		return true;
+//		
+//	}
+//	
 
 	public int getBoardSize() {
 		return boardMatrix.length;
@@ -111,7 +111,6 @@ public class BoardMaker {
 		gui.set_Reached_HOME(flag);		 
 	}
 	
-	
-	
+		
 	
 }

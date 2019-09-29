@@ -1,4 +1,3 @@
-
 import java.awt.Color;
 import java.awt.event.ActionListener;
 
@@ -10,7 +9,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 
@@ -27,25 +25,20 @@ public class GUI_Frame extends JPanel {
 	private final JPanel selectionPanel2;
 	private final JPanel welcomePanel;
 	private final JPanel startingPanel;
-	private final JPanel inputPanel;
-	private final JPanel inputPanel2;
+	
 	
 	private final JButton buttonStart;
 	private final JRadioButton rComputer;
 	private final JRadioButton rHuman;
 	private final JRadioButton rSpecified;
 	private final JRadioButton rRandom;
-	
-	private final ButtonGroup bgDifficulty ;
-	private final ButtonGroup bgEnvironment ;
+	private final ButtonGroup bgDifficulty;
+	private final ButtonGroup bgDifficulty2;
 
 	
 	private final JLabel playWith;
-	private final JLabel ChooseEnvironment;
+	private final JLabel playWith2;
 	private final JLabel welcomeMsg;
-	private final JLabel pitNumber;
-	private final JLabel wumpusNumber;
-	
 
 	private JFrame frame;
 
@@ -55,51 +48,42 @@ public class GUI_Frame extends JPanel {
 		frame = new JFrame(title);
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.setBackground(Color.white);
-	    frame.setSize(width,height);
+	    frame.setSize(762, 343);
 
 			
 		
 		selectionPanel = new JPanel();
-		selectionPanel.setBounds(0, height/4, width, height/4);
-		
-		selectionPanel2 = new JPanel();
-		selectionPanel2.setBounds(0, 2*height/4, width, height/4);
+		selectionPanel.setBounds(0, height/3, width, height/3);
 
-		inputPanel = new JPanel();
-		inputPanel.setBounds(0, 3*height/4, width, height/4);
-		
-		inputPanel2 = new JPanel();
-		inputPanel2.setBounds(0, 4*height/4, width, height/4);
+		selectionPanel2 = new JPanel();
+		selectionPanel2.setBounds(0, height/5, width, height/5);
 		
 		welcomePanel = new JPanel();
-		welcomePanel.setBounds(0, 0, width,  height/4);
+		welcomePanel.setBounds(0, 0, width,  height/3);
 		
 		startingPanel = new JPanel();
-		startingPanel.setBounds(0, 5*height/4, width,  height);
+		startingPanel.setBounds(0, 2*height/3, width,  height);
 
 		
 		welcomeMsg = new JLabel("    WELCOME TO WUMPUS WORLD   ");
 		buttonStart = new JButton("READY SET GOOO!");
 		
 		rComputer = new JRadioButton(" Computer");
-		rHuman = new JRadioButton(" Human");	
+		rHuman = new JRadioButton(" Human");
 		
 		rSpecified = new JRadioButton(" Specified Environment");
-		rRandom = new JRadioButton(" Random Environment");		
+		rRandom = new JRadioButton(" Random Environment");
 		
 		bgDifficulty = new ButtonGroup();
 		bgDifficulty.add(rComputer);
 		bgDifficulty.add(rHuman);
 		rComputer.isSelected();
 		
+		bgDifficulty2 = new ButtonGroup();
+		bgDifficulty2.add(rSpecified);
+		bgDifficulty2.add(rRandom);
+			
 		playWith = new JLabel(" PLAY WITH :  ");
-		
-		bgEnvironment = new ButtonGroup();
-		bgDifficulty.add(rSpecified);
-		bgDifficulty.add(rRandom);
-		rSpecified.isSelected();
-				
-		ChooseEnvironment = new JLabel(" CHOOSE  ENVIRONMENT TYPE :  ");
 		
 		
 		startingPanel.add(buttonStart);
@@ -109,25 +93,12 @@ public class GUI_Frame extends JPanel {
 		selectionPanel.add(rComputer);
 		selectionPanel.add(rHuman);
 		
-		selectionPanel2.add(ChooseEnvironment);
-		selectionPanel2.add(rSpecified);
-		selectionPanel2.add(rRandom);
+		playWith2 = new JLabel(" PLAY WITH :  ");
 		
-		pitNumber = new JLabel(" Number of Pits :  ");
-		wumpusNumber = new JLabel(" Number of Wumpus :  ");
 		
-
-		inputPanel.add(pitNumber);
-		inputPanel2.add(wumpusNumber);
-	
-		
-		JTextField jt = new JTextField(20);	
-		inputPanel.add(jt);
-		
-		JTextField jt2 = new JTextField(20);
-		inputPanel2.add(jt2);
-	
-		
+		selectionPanel.add(playWith2);
+		selectionPanel.add(rSpecified);
+		selectionPanel.add(rRandom);
 		
 		setupPanel = new JPanel();
 		setupPanel.setLayout(new BoxLayout(setupPanel, BoxLayout.Y_AXIS));
@@ -137,10 +108,6 @@ public class GUI_Frame extends JPanel {
 		setupPanel.add(selectionPanel);
 		setupPanel.add(Box.createVerticalGlue());
 		setupPanel.add(selectionPanel2);
-		setupPanel.add(Box.createVerticalGlue());
-		setupPanel.add(inputPanel);
-		setupPanel.add(Box.createVerticalGlue());
-		setupPanel.add(inputPanel2);
 		setupPanel.add(Box.createVerticalGlue());
 		setupPanel.add(startingPanel);
 		
@@ -158,11 +125,6 @@ public class GUI_Frame extends JPanel {
 		return rComputer.isSelected();
 	}
 	
-	public boolean isRandomEnvironment() {
-		return rRandom.isSelected();
-	}
-	
-	
 	public void listenGameStartButton(ActionListener listener) {
 		buttonStart.addActionListener(listener);
 	}
@@ -179,7 +141,5 @@ public class GUI_Frame extends JPanel {
 		validate();
 		frame.pack();
 	}
-	
-
 	
 }

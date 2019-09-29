@@ -51,7 +51,7 @@ public class BoardGUI extends JPanel {
 	
 	boolean game_lost = false;
 	boolean has_gold  = false;
-	boolean gold_home = false;
+	boolean reached_home = false;
 	boolean game_won  = false;
 	int wumpus_dead   = 0;
 	
@@ -149,66 +149,24 @@ public class BoardGUI extends JPanel {
 		lastState_X = robotPosX;
 		
 		
-//		get_senses();
-//		printSense(2, senses);
-
-//		if ( gold_home )
-//		{
-//			game_won = true;
-//		}
-//		
-//		for ( int i = 0 ; i < totalCell ; i++ )
-//		{
-//			for ( int j = 0 ; j < totalCell ; j++ )
-//			{
-//				x = j *( cellLength) + 5;
-//				y = i *( cellLength) + 85;
-//				
-////				g2D.drawRect( x, y, 64, 64);
-//				
-//				g2D.setColor( Color.DARK_GRAY );
-//				g2D.setFont( new Font( "Verdana", Font.BOLD, 15 ) );
-//				
-//				if(board[i][j] != PIT || board[i][j] != WUMPUS) {
-//					if ( breeze_placement[i][j] == 1 )   g2D.drawString( "B", x , y+8  );
-//					if ( smell_placement[i][j] == 1 )   g2D.drawString( "    S", x , y+8 );
-//					if ( glitter_placement[i][j] == 1 ) g2D.drawString( "        G", x , y+8 );
-//				}
-//				
-//				g2D.setColor( Color.LIGHT_GRAY );
-//				
-//				if ( board[i][j] == PIT ) g2D.drawImage( pit, x+8,  y+12, Color.LIGHT_GRAY, null );				
-//				if ( board[i][j] == WUMPUS ) g2D.drawImage( wumpus, x+8,  y+12, null );				
-////				if ( board[i][j] == DEAD_WUMPUS ) g2D.drawImage( dead_wumpus, x, y, null );			
-//				if ( board[i][j] == GOLD ) g2D.drawImage( gold, x+8,  y+10, null );
-//				if ( i == robo_y && j == robo_x ) g2D.drawImage( robot, x+8,  y+12, null );
-//				
-//				robo_y = robotPosY;
-//				robo_x = robotPosX;
-//											
-//			}
-//		}
+		if ( game_lost )
+		{
+			g2D.setFont( new Font( "Arial", Font.BOLD, 60 ) );
+			g2D.setColor( Color.RED );
+			g2D.drawString("** DEAD! GAME LOST! **", getWidth()/2 - 180, getHeight()/2 - 50 );
+		}
+		else if ( reached_home )
+		{
+			g2D.setFont( new Font( "Arial", Font.BOLD, 60 ) );
+			g2D.setColor( Color.BLUE );
+			g2D.drawString("GAME WON!", getWidth()/2 - 180, getHeight()/2 - 50 );
+		}
+		else if(has_gold){
+			g2D.setFont( new Font( "Arial", Font.BOLD, 60 ) );
+			g2D.setColor( Color.GREEN );
+			g2D.drawString("GOT THE JACKPOT!!", getWidth()/2 - 180, getHeight()/2 - 50 );
+		}
 		
-//		if ( game_lost )
-//		{
-//			g2D.setFont( new Font( "Arial", Font.BOLD, 60 ) );
-//			g2D.setColor( Color.RED );
-//			g2D.drawString("GAME LOST!", getWidth()/2 - 180, getHeight()/2 - 50 );
-//		}
-//		else if ( game_won )
-//		{
-//			g2D.setFont( new Font( "Arial", Font.BOLD, 60 ) );
-//			g2D.setColor( Color.BLUE );
-//			g2D.drawString("GAME WON!", getWidth()/2 - 180, getHeight()/2 - 50 );
-//		}
-//		else
-//		{
-//			g2D.setColor( Color.BLACK );
-//			g2D.drawString("ROBOT LCD:", 5, ( ( BOARD_SIZE  ) * TILE_SIZE ) + 30 );
-//			g2D.drawString("Currently sensing:" + senses, 10, ( ( BOARD_SIZE  ) * TILE_SIZE ) + 50 );
-//			g2D.drawString("Arrows Left:" + arrows, 10, ( ( BOARD_SIZE  ) * TILE_SIZE ) + 70 );
-//			g2D.setColor( Color.LIGHT_GRAY );
-//		}
 	}
 	
 	
@@ -233,7 +191,7 @@ public class BoardGUI extends JPanel {
 		}
 		
 		
-		if ( has_gold && !gold_home )
+		if ( has_gold && !reached_home )
 		{
 //			senses = "";
 			senses = "-walking for a safe departure-";
@@ -393,6 +351,23 @@ public class BoardGUI extends JPanel {
 	
 	public void attachListener(MouseListener listener) {
 		addMouseListener(listener);
+	}
+	
+	
+	public void set_Game_WON(boolean flag) {
+		game_won  = flag;
+	}
+	
+	public void set_Game_LOST(boolean flag) {
+		game_lost = flag;
+	}
+	
+	public void set_Has_GOLD(boolean flag) {
+		has_gold  = flag;
+	}
+	
+	public void set_Reached_HOME(boolean flag) {
+		reached_home = flag;		 
 	}
 	
 	

@@ -125,20 +125,22 @@ public class BoardGUI extends JPanel {
 		
 		
 		
-		g2D.setColor( Color.DARK_GRAY );
 		g2D.setFont( new Font( "Verdana", Font.BOLD, 15 ) );
 		
-		if(lastState_X != -1 && lastState_Y != -1) {			
-			g2D.fillRect(lastState_X-5, lastState_Y-5, cellLength-1, cellLength-1);
+		if(lastState_X != -1 && lastState_Y != -1) {
+			g2D.setColor( Color.DARK_GRAY );
+			g2D.fillRect(lastState_X*( cellLength) + 5, lastState_Y*( cellLength) + 85, cellLength-5, cellLength-85);
+			System.out.println("-- HERE --");
 		}
 		
+		g2D.setColor( Color.DARK_GRAY );
 		if(board[robo_y][robo_x] != PIT || board[robo_y][robo_x] != WUMPUS) {
 			if ( breeze_placement[robo_y][robo_x] == 1 )   g2D.drawString( "B", x , y+8  );
 			if ( smell_placement[robo_y][robo_x] == 1 )   g2D.drawString( "    S", x , y+8 );
 			if ( glitter_placement[robo_y][robo_x] == 1 ) g2D.drawString( "        G", x , y+8 );
 		}
 		
-		if ( board[robo_y][robo_x] == PIT ) g2D.drawImage( pit, x+8,  y+12, Color.LIGHT_GRAY, null );				
+		if ( board[robo_y][robo_x] == PIT ) g2D.drawImage( pit, x+8,  y+12, null );				
 		if ( board[robo_y][robo_x] == WUMPUS ) g2D.drawImage( wumpus, x+8,  y+12, null );				
 //		if ( board[robo_y][robo_x] == DEAD_WUMPUS ) g2D.drawImage( dead_wumpus, x, y, null );			
 		if ( board[robo_y][robo_x] == GOLD ) g2D.drawImage( gold, x+8,  y+10, null );
@@ -171,47 +173,50 @@ public class BoardGUI extends JPanel {
 	}
 	
 	
-	public void get_senses( )
-	{
-		
-		senses = "";
-		
-		if ( smell_placement[robo_y][robo_x] == 1  )
-		{
-			senses += "  -a horrible smell-  ";
-		}
-		
-		if ( breeze_placement[robo_y][robo_x]  == 1  )
-		{
-			senses += "  -a breeze-  ";
-		}
-		
-		if ( glitter_placement[robo_y][robo_x] == 1   )
-		{
-			senses += "  -glitter-  ";
-		}
-		
-		
-		if ( has_gold && !reached_home )
-		{
-//			senses = "";
-			senses = "-walking for a safe departure-";
-		}
-		
-		else {
-			senses = " -nothing- ";
-		}
-		
-	}
+//	public void get_senses( )
+//	{
+//		
+//		senses = "";
+//		
+//		if ( smell_placement[robo_y][robo_x] == 1  )
+//		{
+//			senses += "  -a horrible smell-  ";
+//		}
+//		
+//		if ( breeze_placement[robo_y][robo_x]  == 1  )
+//		{
+//			senses += "  -a breeze-  ";
+//		}
+//		
+//		if ( glitter_placement[robo_y][robo_x] == 1   )
+//		{
+//			senses += "  -glitter-  ";
+//		}
+//		
+//		
+//		if ( has_gold && !reached_home )
+//		{
+////			senses = "";
+//			senses = "-walking for a safe departure-";
+//		}
+//		
+//		else {
+//			senses = " -nothing- ";
+//		}
+//		
+//	}
 	
 	
 	public void printSense(int arrows, String text) {
+		g2D.setColor( Color.WHITE );
+		g2D.fillRect(0, 0, boardWidth, 80);
+		
 		FontMetrics metrics = g2D.getFontMetrics(g2D.getFont());				
 		g2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
 				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		
 		
-		g2D.setFont(new Font(g2D.getFont().getName(), Font.PLAIN, 18));
+		g2D.setFont(new Font(g2D.getFont().getName(), Font.BOLD, 15));
 //		g2D.setColor(Color.black);
 		
 //		int x = (boardWidth/2 - metrics.stringWidth(text));
@@ -219,16 +224,16 @@ public class BoardGUI extends JPanel {
 		int y = 30;
 		
 		g2D.setColor( new Color(37, 37, 116));		
-		g2D.drawString("SENSING => " + text,x,y);
+		g2D.drawString(text, x, y);
 		
-		g2D.setFont(new Font(g2D.getFont().getName(), Font.PLAIN, 18));
+		g2D.setFont(new Font(g2D.getFont().getName(), Font.BOLD, 15));
 		
-		int x1 = boardWidth - 120;
+		int x1 = boardWidth - 140;
 		int y1 = 30;
 		
 		String arrowText = "Arrows Left: " + arrows;
 		g2D.setColor( Color.black);		
-		g2D.drawString(arrowText,x1,y1);
+		g2D.drawString(arrowText, x1, y1);
 		
 		
 		
@@ -236,77 +241,6 @@ public class BoardGUI extends JPanel {
 		
 	}
 	
-//	public int getRelativePos(int x, boolean isWidth) {
-//		if(x >= boardWidth) x = boardWidth-1;
-//		
-//		if(isWidth)
-//			return (int) ( x * totalCell / boardWidth );
-//		else
-//			return (int) ( (x+80) * totalCell / boardWidth );
-//	}
-//	
-//	
-//	public Dimension getPreferredSize() {
-//		return new Dimension(boardWidth, boardWidth+100);
-//	}
-//	
-//	
-//	public void printWinner(int winner, String text) {
-//		FontMetrics metrics = g2D.getFontMetrics(g2D.getFont());		
-//		
-//		g2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-//   			 				 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-//		g2D.setFont(new Font(g2D.getFont().getName(), Font.PLAIN, 48));
-//		
-//		g2D.setColor(Color.black);
-//		int x = (boardWidth/2 - metrics.stringWidth(text)*2);
-//		int y = boardWidth/2;
-//		
-//
-//		
-//		g2D.setColor(winner == 2 ? Color.green : (winner == 1 ? Color.red : Color.blue));
-//		
-//		g2D.drawString(text,x,y);
-//		
-//		repaint();
-//		
-//	}
-//	
-//	
-//	public void drawStone(int posX, int posY, boolean human) {
-//		
-//		if(posX >= totalCell || posY >= totalCell) return;
-//		
-//		
-//		
-//		g2D.setColor(human ? Color.green : Color.orange);
-//		g2D.fillOval((int)(cellLength*(posX+0.2)), 
-//					 (int)(cellLength*(posY+0.2)), 
-//					 (int)(cellLength*0.7), 
-//					 (int)(cellLength*0.7));
-//		
-//		g2D.setColor(Color.blue);
-//		g2D.setStroke(new BasicStroke((float)1.5));
-//		g2D.drawOval((int)(cellLength*(posX+0.2)), 
-//					 (int)(cellLength*(posY+0.2)), 
-//					 (int)(cellLength*0.7), 
-//					 (int)(cellLength*0.7));
-//		
-//		try {
-//			Thread.sleep(600);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		g2D.setColor(Color.black);
-//		g2D.setStroke(new BasicStroke(2));
-//		g2D.drawOval((int)(cellLength*(posX+0.2)), 
-//					 (int)(cellLength*(posY+0.2)), 
-//					 (int)(cellLength*0.7), 
-//					 (int)(cellLength*0.7));
-//		
-//		repaint();
-//	}
 	
 	
 	public EnvironmentSetup getEnvironment() {
@@ -331,20 +265,7 @@ public class BoardGUI extends JPanel {
         FontMetrics metrics = g2D.getFontMetrics(g2D.getFont());				
 		g2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
    			 				 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		
-		
-//        String title = "Exploring Gold in Wumpus World!!";
-//		g2D.setFont(new Font(g2D.getFont().getName(), Font.PLAIN, 20));
-////		g2D.setColor(Color.black);
-//		
-//		int x1 = (boardWidth/2 - metrics.stringWidth(title)+40);
-//		int y1 = 25;
-//			
-//		g2D.setColor(Color.DARK_GRAY);		
-//		g2D.drawString(title,x1,y1);
-//		
-//		g2D.drawLine(100, 35, boardWidth-100, 35);
-//		
+				
 		
 	}
 	

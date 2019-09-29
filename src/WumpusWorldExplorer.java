@@ -1,8 +1,11 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
-public class WumpusWorldExplorer {
+import javax.swing.SwingWorker;
+
+public class WumpusWorldExplorer extends SwingWorker<Void, String> {
 	
 	private EnvironmentSetup env;
 	private BoardGUI gui;
@@ -16,7 +19,7 @@ public class WumpusWorldExplorer {
 	private int goldNode;
 	private int agent_row = 9, agent_col = 0;
 	private boolean GAME_OVER = false;
-	private int SLEEP = 500;	
+	private int SLEEP = 1000;	
 	private int[][] pit_possibility, wumpus_possibility, cell_OK, visited, unvisited,
 						nodesID, relationships;
 	
@@ -37,7 +40,9 @@ public class WumpusWorldExplorer {
 	
 
 	
-	public void startExploring(){
+//	public void startExploring(){
+	@Override
+	  protected Void doInBackground() throws Exception {
 		
 		marked = new int[BOARD_SIZE*BOARD_SIZE];
 		nodesID = new int[BOARD_SIZE][BOARD_SIZE];
@@ -127,6 +132,8 @@ public class WumpusWorldExplorer {
 		boardMaker.set_Game_WON(true);
 //		printSense(arrows, "[SENSE]: sense);
 		
+		return null;
+		
 	}
 	
 	public void dfsExplore(int curNodeID) {
@@ -137,7 +144,8 @@ public class WumpusWorldExplorer {
 		}
 		if(pit_placement[curNodeID / 10][curNodeID % 10] == 1 && wumpus_placement[curNodeID / 10][curNodeID % 10] == 1) {
 			sense = "** DEAD! GAME LOST! **";
-			boardMaker.printSense(arrows, "[SENSE]: " + sense);
+//			boardMaker.printSense(arrows, "[SENSE]: " + sense);
+			publish("[SENSE]: " + sense);
 			System.out.println("Node: "+curNodeID+"\n ** DEAD! **");
 			boardMaker.set_Game_LOST(true);
 			GAME_OVER = true;
@@ -147,7 +155,8 @@ public class WumpusWorldExplorer {
 		if(gold_placement[curNodeID / 10][curNodeID % 10] == 1) {
 //			printSense(arrows, "[SENSE]: sense);
 			sense = "** GOT GOLD **";
-			boardMaker.printSense(arrows, "[SENSE]: " + sense);
+//			boardMaker.printSense(arrows, "[SENSE]: " + sense);
+			publish("[SENSE]: " + sense);
 			System.out.println("Node: "+curNodeID+"\n ** GOT GOLD **");
 			boardMaker.set_Has_GOLD(true);
 			GAME_OVER = true;
@@ -167,8 +176,12 @@ public class WumpusWorldExplorer {
 		if(!BREEZE && !SMELL) sense += "-OK--No Risk-";
 		
 		System.out.println("Node: "+curNodeID+"\n[SENSE]: " +sense);
-		boardMaker.printSense(arrows, "[SENSE]: " + sense);
-		boardMaker.drawWumpusWorldEnvironment(curNodeID / 10, curNodeID % 10);
+//		boardMaker.printSense(arrows, "[SENSE]: " + sense);						// NECESSARY
+//		boardMaker.drawWumpusWorldEnvironment(curNodeID / 10, curNodeID % 10);
+		
+		publish("[SENSE]: " + sense);
+		publish(Integer.toString(curNodeID));
+		
 		try {
 			Thread.sleep(SLEEP);
 		} catch (InterruptedException e) {
@@ -313,8 +326,12 @@ public class WumpusWorldExplorer {
 //					}
 //				}
 				if(!GAME_OVER) {
-					boardMaker.printSense(arrows, "[DECISION]: --Stepping Back--");
-					boardMaker.drawWumpusWorldEnvironment(safeCell[k] / 10, safeCell[k] % 10);
+//					boardMaker.printSense(arrows, "[DECISION]: --Stepping Back--");
+//					boardMaker.drawWumpusWorldEnvironment(safeCell[k] / 10, safeCell[k] % 10);
+					
+					publish("[DECISION]: --Stepping Back--");
+					publish(Integer.toString(safeCell[k]));
+					
 					try {
 						Thread.sleep(SLEEP);
 					} catch (InterruptedException e) {
@@ -352,25 +369,28 @@ public class WumpusWorldExplorer {
 				else if(riskyNodeID == curNodeID+10) side += "DOWN";
 				if(SMELL) {	
 					arrows--;
-					boardMaker.printSense(arrows, "[DECISION]: Moving "+side+"-Throwing Arrow for safety-");
+//					boardMaker.printSense(arrows, "[DECISION]: Moving "+side+"-Throwing Arrow for safety-");
+					publish("[DECISION]: Moving "+side+"-Throwing Arrow for safety-");
 					try {
-						Thread.sleep(SLEEP - 200);
+						Thread.sleep(SLEEP - 150);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
 					
 					if(wumpus_placement[ riskyNodeID / 10 ][ riskyNodeID % 10 ] == 1) {
 						System.out.println("Node: "+riskyNodeID+"\n ** WUMPUS DEAD! **");
-						boardMaker.printSense(arrows, "[SENSE]: ** WUMPUS DEAD **");
+//						boardMaker.printSense(arrows, "[SENSE]: ** WUMPUS DEAD **");
+						publish("[SENSE]: ** WUMPUS DEAD **");
 					}
 				}
 				else {
-					boardMaker.printSense(arrows, "[DECISION]: -Taking RISK- Moving "+side);
+//					boardMaker.printSense(arrows, "[DECISION]: -Taking RISK- Moving "+side);
+					publish("[DECISION]: -Taking RISK- Moving "+side);
 				}
 				
 			}
 			try {
-				Thread.sleep(SLEEP - 200);
+				Thread.sleep(SLEEP - 150);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -379,6 +399,22 @@ public class WumpusWorldExplorer {
 //			if(count<=20)dfsExplore(riskyNodeID);
 			dfsExplore(riskyNodeID);
 		}
+	}
+	
+	
+	@Override
+	protected void process(final List<String> chunks) {
+		// Updates the messages text area
+		
+	    for (final String info : chunks) {
+	    	if(info.length() <= 3) {
+	    		int nodeID = Integer.parseInt(info);
+				boardMaker.getGUI().drawWumpusWorldEnvironment(nodeID / 10, nodeID % 10);
+	    	}
+	    	else {
+	    		boardMaker.getGUI().printSense(arrows, info);
+	    	}
+	    }
 	}
 	
 	

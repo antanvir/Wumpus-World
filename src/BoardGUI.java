@@ -44,6 +44,7 @@ public class BoardGUI extends JPanel {
 	
 	int robo_x = 0;
 	int robo_y = 9;
+	int lastState_Y = -1, lastState_X = -1;
 	
 	static final int HOME_X = 0;
 	static final int HOME_Y = 9;
@@ -91,7 +92,7 @@ public class BoardGUI extends JPanel {
 		pit = v.getImage();
 		
 		drawGameGrid();
-		drawWumpusWorldEnvironment(robo_y, robo_x);
+//		drawWumpusWorldEnvironment(robo_y, robo_x);
 //		repaint();
 		
 		
@@ -115,47 +116,78 @@ public class BoardGUI extends JPanel {
 	
 	public void drawWumpusWorldEnvironment(int robotPosY, int robotPosX) {
 		int x, y = 0;
-		
 		robo_y = robotPosY;
 		robo_x = robotPosX;
 		markedRoute[robo_y][robo_x] = 1;
 		
-		get_senses();
-		printSense(2, senses);
-
-		if ( gold_home )
-		{
-			game_won = true;
+		x = robo_x *( cellLength) + 5;
+		y = robo_y *( cellLength) + 85;
+		
+		
+		
+		g2D.setColor( Color.DARK_GRAY );
+		g2D.setFont( new Font( "Verdana", Font.BOLD, 15 ) );
+		
+		if(lastState_X != -1 && lastState_Y != -1) {			
+			g2D.fillRect(lastState_X-5, lastState_Y-5, cellLength-1, cellLength-1);
 		}
 		
-		for ( int i = 0 ; i < totalCell ; i++ )
-		{
-			for ( int j = 0 ; j < totalCell ; j++ )
-			{
-				x = j *( cellLength) + 5;
-				y = i *( cellLength) + 85;
-				
-//				g2D.drawRect( x, y, 64, 64);
-				
-				g2D.setColor( Color.DARK_GRAY );
-				g2D.setFont( new Font( "Verdana", Font.BOLD, 15 ) );
-				
-				if(board[i][j] != PIT || board[i][j] != WUMPUS) {
-					if ( breeze_placement[i][j] == 1 )   g2D.drawString( "B", x , y+8  );
-					if ( smell_placement[i][j] == 1 )   g2D.drawString( "    S", x , y+8 );
-					if ( glitter_placement[i][j] == 1 ) g2D.drawString( "        G", x , y+8 );
-				}
-				
-				g2D.setColor( Color.LIGHT_GRAY );
-				
-				if ( board[i][j] == PIT ) g2D.drawImage( pit, x+8,  y+12, Color.LIGHT_GRAY, null );				
-				if ( board[i][j] == WUMPUS ) g2D.drawImage( wumpus, x+8,  y+12, null );				
-//				if ( board[i][j] == DEAD_WUMPUS ) g2D.drawImage( dead_wumpus, x, y, null );			
-				if ( board[i][j] == GOLD ) g2D.drawImage( gold, x+8,  y+10, null );
-				if ( i == robo_y && j == robo_x ) g2D.drawImage( robot, x+8,  y+12, null );
-											
-			}
+		if(board[robo_y][robo_x] != PIT || board[robo_y][robo_x] != WUMPUS) {
+			if ( breeze_placement[robo_y][robo_x] == 1 )   g2D.drawString( "B", x , y+8  );
+			if ( smell_placement[robo_y][robo_x] == 1 )   g2D.drawString( "    S", x , y+8 );
+			if ( glitter_placement[robo_y][robo_x] == 1 ) g2D.drawString( "        G", x , y+8 );
 		}
+		
+		if ( board[robo_y][robo_x] == PIT ) g2D.drawImage( pit, x+8,  y+12, Color.LIGHT_GRAY, null );				
+		if ( board[robo_y][robo_x] == WUMPUS ) g2D.drawImage( wumpus, x+8,  y+12, null );				
+//		if ( board[robo_y][robo_x] == DEAD_WUMPUS ) g2D.drawImage( dead_wumpus, x, y, null );			
+		if ( board[robo_y][robo_x] == GOLD ) g2D.drawImage( gold, x+8,  y+10, null );
+		
+		g2D.drawImage( robot, x+8,  y+12, null );
+		
+		lastState_Y = robotPosY;
+		lastState_X = robotPosX;
+		
+		
+//		get_senses();
+//		printSense(2, senses);
+
+//		if ( gold_home )
+//		{
+//			game_won = true;
+//		}
+//		
+//		for ( int i = 0 ; i < totalCell ; i++ )
+//		{
+//			for ( int j = 0 ; j < totalCell ; j++ )
+//			{
+//				x = j *( cellLength) + 5;
+//				y = i *( cellLength) + 85;
+//				
+////				g2D.drawRect( x, y, 64, 64);
+//				
+//				g2D.setColor( Color.DARK_GRAY );
+//				g2D.setFont( new Font( "Verdana", Font.BOLD, 15 ) );
+//				
+//				if(board[i][j] != PIT || board[i][j] != WUMPUS) {
+//					if ( breeze_placement[i][j] == 1 )   g2D.drawString( "B", x , y+8  );
+//					if ( smell_placement[i][j] == 1 )   g2D.drawString( "    S", x , y+8 );
+//					if ( glitter_placement[i][j] == 1 ) g2D.drawString( "        G", x , y+8 );
+//				}
+//				
+//				g2D.setColor( Color.LIGHT_GRAY );
+//				
+//				if ( board[i][j] == PIT ) g2D.drawImage( pit, x+8,  y+12, Color.LIGHT_GRAY, null );				
+//				if ( board[i][j] == WUMPUS ) g2D.drawImage( wumpus, x+8,  y+12, null );				
+////				if ( board[i][j] == DEAD_WUMPUS ) g2D.drawImage( dead_wumpus, x, y, null );			
+//				if ( board[i][j] == GOLD ) g2D.drawImage( gold, x+8,  y+10, null );
+//				if ( i == robo_y && j == robo_x ) g2D.drawImage( robot, x+8,  y+12, null );
+//				
+//				robo_y = robotPosY;
+//				robo_x = robotPosX;
+//											
+//			}
+//		}
 		
 //		if ( game_lost )
 //		{

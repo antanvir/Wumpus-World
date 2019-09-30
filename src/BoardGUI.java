@@ -41,7 +41,7 @@ public class BoardGUI extends JPanel {
 	private int[][] board, markedRoute, breeze_placement, glitter_placement, smell_placement;
 	
 	String senses = " -nothing- ";
-	int arrows    = 2;
+	int arrows    = 1;
 	
 	int robo_x = 0;
 	int robo_y = 9;
@@ -56,13 +56,15 @@ public class BoardGUI extends JPanel {
 	boolean game_won  = false;
 	int wumpus_dead   = 0;
 	
+	int Num_Pit = -1, Num_Wumpus = -1;
+	
 	
 	public BoardGUI(int boardWidth, int totalCell) {
 		this.boardWidth = boardWidth;
 		this.totalCell = totalCell;
 		this.cellLength  = boardWidth / totalCell;
 		
-		env = new EnvironmentSetup();
+		env = new EnvironmentSetup(Num_Pit, Num_Wumpus);
 		board = env.getBoard();
 		breeze_placement = env.getBreezeMatrix();
 		glitter_placement = env.getGlitterMatrix();
@@ -92,8 +94,8 @@ public class BoardGUI extends JPanel {
 		ImageIcon v = new ImageIcon(this.getClass().getResource("images/pit1.png"));
 		pit = v.getImage();
 		
-		ImageIcon x = new ImageIcon(this.getClass().getResource("images/white1.jpg"));
-		white = x.getImage();
+//		ImageIcon x = new ImageIcon(this.getClass().getResource("images/white1.jpg"));
+//		white = x.getImage();
 		
 		drawGameGrid();
 //		drawWumpusWorldEnvironment(robo_y, robo_x);
@@ -116,6 +118,32 @@ public class BoardGUI extends JPanel {
 		for(int i=0; i<=totalCell; i++) {		// Horizontal Line
 			g2D.drawLine(0, 80+i*cellLength, boardWidth, 80+i*cellLength);
 		}
+		
+		
+		g2D.setColor( Color.DARK_GRAY );
+		for ( int row = 0; row < 10; row++ ) 
+		{
+			for ( int col = 0; col < 10; col++ )
+			{
+				int robo_y = row;
+				int robo_x = col;
+				int x = robo_x *( cellLength) + 5;
+				int y = robo_y *( cellLength) + 85;
+				if(board[robo_y][robo_x] != PIT || board[robo_y][robo_x] != WUMPUS) {
+					if ( breeze_placement[robo_y][robo_x] == 1 )   g2D.drawString( "B", x , y+8  );
+					if ( smell_placement[robo_y][robo_x] == 1 )   g2D.drawString( "    S", x , y+8 );
+					if ( glitter_placement[robo_y][robo_x] == 1 ) g2D.drawString( "        G", x , y+8 );
+				}
+				
+				if ( board[robo_y][robo_x] == PIT ) g2D.drawImage( pit, x+8,  y+12, null );				
+				if ( board[robo_y][robo_x] == WUMPUS ) g2D.drawImage( wumpus, x+8,  y+12, null );				
+		//		if ( board[robo_y][robo_x] == DEAD_WUMPUS ) g2D.drawImage( dead_wumpus, x, y, null );			
+				if ( board[robo_y][robo_x] == GOLD ) g2D.drawImage( gold, x+8,  y+10, null );
+			}
+		}
+		
+		g2D.drawImage( robot, robo_x+8,  robo_y+12, null );
+		
 	}
 	
 	public void drawWumpusWorldEnvironment(int robotPosY, int robotPosX) {
@@ -140,17 +168,19 @@ public class BoardGUI extends JPanel {
 //			System.out.println("-- HERE --\n"+ lastState_X*( cellLength) + 5 + " "+ lastState_Y*( cellLength) + 85 );
 		}
 		
-		g2D.setColor( Color.DARK_GRAY );
-		if(board[robo_y][robo_x] != PIT || board[robo_y][robo_x] != WUMPUS) {
-			if ( breeze_placement[robo_y][robo_x] == 1 )   g2D.drawString( "B", x , y+8  );
-			if ( smell_placement[robo_y][robo_x] == 1 )   g2D.drawString( "    S", x , y+8 );
-			if ( glitter_placement[robo_y][robo_x] == 1 ) g2D.drawString( "        G", x , y+8 );
-		}
-		
-		if ( board[robo_y][robo_x] == PIT ) g2D.drawImage( pit, x+8,  y+12, null );				
-		if ( board[robo_y][robo_x] == WUMPUS ) g2D.drawImage( wumpus, x+8,  y+12, null );				
-//		if ( board[robo_y][robo_x] == DEAD_WUMPUS ) g2D.drawImage( dead_wumpus, x, y, null );			
-		if ( board[robo_y][robo_x] == GOLD ) g2D.drawImage( gold, x+8,  y+10, null );
+//		g2D.setColor( Color.DARK_GRAY );
+//		if(board[robo_y][robo_x] != PIT || board[robo_y][robo_x] != WUMPUS) {
+//			if ( breeze_placement[robo_y][robo_x] == 1 )   g2D.drawString( "B", x , y+8  );
+//			if ( smell_placement[robo_y][robo_x] == 1 )   g2D.drawString( "    S", x , y+8 );
+//			if ( glitter_placement[robo_y][robo_x] == 1 ) g2D.drawString( "        G", x , y+8 );
+//		}
+//		
+//		if ( board[robo_y][robo_x] == PIT ) g2D.drawImage( pit, x+8,  y+12, null );				
+//		if ( board[robo_y][robo_x] == WUMPUS ) g2D.drawImage( wumpus, x+8,  y+12, null );				
+////		if ( board[robo_y][robo_x] == DEAD_WUMPUS ) g2D.drawImage( dead_wumpus, x, y, null );			
+//		if ( board[robo_y][robo_x] == GOLD ) g2D.drawImage( gold, x+8,  y+10, null );
+//		
+//		g2D.drawImage( robot, x+8,  y+12, null );
 		
 		g2D.drawImage( robot, x+8,  y+12, null );
 		
@@ -224,6 +254,12 @@ public class BoardGUI extends JPanel {
 	}
 	
 	
+	public void set_Pit_And_Wumpus(int pit, int wumpus) {
+		Num_Pit = pit;
+		Num_Wumpus = wumpus;
+	}
+	
+	
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -266,6 +302,10 @@ public class BoardGUI extends JPanel {
 	
 	public boolean get_Has_GOLD() {	
 		return has_gold;
+	}
+	
+	public void setArrows(int arrows) {
+		this.arrows = arrows;
 	}
 	
 

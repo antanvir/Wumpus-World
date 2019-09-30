@@ -31,15 +31,15 @@ public class EnvironmentSetup
 	static final int ROBO_RIGHT  = 3;
 	static final int ROBO_DOWN   = 4;
 	
-	static final int WUMPUS_LIMIT = 2;
-	static final int PIT_LIMIT    = 15;
+	static  int WUMPUS_LIMIT = 2;
+	static  int PIT_LIMIT    = 15;
 	static final int GOLD_LIMIT   = 1;
 	
 	static final int BOARD_SIZE = 10;	
 	static final int TOTAL_CELL  = 100;
 	
 	String senses = " -nothing- ";
-	int arrows    = 2;
+	int arrows;
 	
 	int robo_x = 0;
 	int robo_y = 9;
@@ -53,9 +53,19 @@ public class EnvironmentSetup
 	boolean game_won  = false;
 	int wumpus_dead   = 0;
 
-	public EnvironmentSetup(){	
-		
-		generate_board();
+	public EnvironmentSetup(int pit, int wumpus){	
+		PIT_LIMIT = pit;
+		WUMPUS_LIMIT = wumpus;
+		if(pit != -1 && wumpus != -1) {
+			arrows = WUMPUS_LIMIT;
+			generate_board();
+		}
+		else {
+			PIT_LIMIT = 10;
+			WUMPUS_LIMIT = 1;
+			arrows = WUMPUS_LIMIT;
+			generate_board();
+		}
 	}
 	
 
@@ -155,6 +165,12 @@ public class EnvironmentSetup
 			System.out.println();
 		}
 		
+//		ClearClutterOfDanger();
+//		PlaceBreeze();
+//		PlaceSmell();
+//		PlaceGlitter();
+//		PlacePits();
+//		PlaceWumpus();
 		
 		for ( int row = 0; row < BOARD_SIZE; row++ )
 		{

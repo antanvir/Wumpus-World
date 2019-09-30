@@ -31,6 +31,17 @@ public class MainClass {
 //				
 //				System.out.println("Depth: " + depth + " AI Makes the first move: " + computerStarts );
 				
+				boolean isRandomEnvironment = gui.isRandomEnvironment();
+				if(isRandomEnvironment) {
+					int pit = gui.No_Of_Pit();
+					int wumpus = gui.No_Of_Wumpus();
+					
+					board.set_Pit_And_Wumpus(pit, wumpus);
+				}
+				else {
+					
+				}
+				
 				gui.attachBoard(board.getGUI());			
 				gui.showBoard();
 				

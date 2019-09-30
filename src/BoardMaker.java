@@ -86,6 +86,10 @@ public class BoardMaker {
 //		gui.printWinner(winner, text);
 //	}
 	
+	public void set_Pit_And_Wumpus(int pit, int wumpus){
+		gui.set_Pit_And_Wumpus(pit, wumpus);
+	}
+	
 	
 	public void printSense(int arrows, String text) {
 		gui.printSense(arrows, text);

@@ -22,6 +22,7 @@ public class BoardGUI extends JPanel {
 	private Image robot;
 	private Image gold;
 	private Image pit;
+	private Image white;
 	
 	static final int BLANK    = 0;
 	static final int PIT         = 1;
@@ -91,6 +92,9 @@ public class BoardGUI extends JPanel {
 		ImageIcon v = new ImageIcon(this.getClass().getResource("images/pit1.png"));
 		pit = v.getImage();
 		
+		ImageIcon x = new ImageIcon(this.getClass().getResource("images/white1.jpg"));
+		white = x.getImage();
+		
 		drawGameGrid();
 //		drawWumpusWorldEnvironment(robo_y, robo_x);
 //		repaint();
@@ -128,9 +132,12 @@ public class BoardGUI extends JPanel {
 		g2D.setFont( new Font( "Verdana", Font.BOLD, 15 ) );
 		
 		if(lastState_X != -1 && lastState_Y != -1) {
-			g2D.setColor( Color.DARK_GRAY );
-			g2D.fillRect(lastState_X*( cellLength) + 5, lastState_Y*( cellLength) + 85, cellLength-5, cellLength-85);
-			System.out.println("-- HERE --");
+			System.out.println(lastState_Y +" " + lastState_X);
+			g2D.setColor(new Color(245, 245, 239));
+			g2D.fillRect(lastState_X*( cellLength)+2, lastState_Y*( cellLength) + 80+2, cellLength-2, cellLength-2);
+//			g2D.drawImage( white, x+8,  y+10, null );	
+//			g2D.setColor( Color.DARK_GRAY );
+//			System.out.println("-- HERE --\n"+ lastState_X*( cellLength) + 5 + " "+ lastState_Y*( cellLength) + 85 );
 		}
 		
 		g2D.setColor( Color.DARK_GRAY );
@@ -153,58 +160,27 @@ public class BoardGUI extends JPanel {
 		
 		if ( game_lost )
 		{
-			g2D.setFont( new Font( "Arial", Font.BOLD, 60 ) );
+			g2D.setFont( new Font( "Arial", Font.BOLD, 40 ) );
 			g2D.setColor( Color.RED );
-			g2D.drawString("** DEAD! GAME LOST! **", getWidth()/2 - 180, getHeight()/2 - 50 );
+			g2D.drawString("** DEAD! GAME LOST! **", boardWidth/2 - 200, boardWidth/2 - 50 );
 		}
 		else if ( reached_home )
 		{
-			g2D.setFont( new Font( "Arial", Font.BOLD, 60 ) );
+			g2D.setFont( new Font( "Arial", Font.BOLD, 40 ) );
 			g2D.setColor( Color.BLUE );
-			g2D.drawString("GAME WON!", getWidth()/2 - 180, getHeight()/2 - 50 );
+			g2D.drawString("GAME WON!", boardWidth/2 - 200, boardWidth/2 - 50 );
 		}
 		else if(has_gold){
-			g2D.setFont( new Font( "Arial", Font.BOLD, 60 ) );
+			g2D.setFont( new Font( "Arial", Font.BOLD, 40 ) );
 			g2D.setColor( Color.GREEN );
-			g2D.drawString("GOT THE JACKPOT!!", getWidth()/2 - 180, getHeight()/2 - 50 );
+//			g2D.drawString("GOT THE JACKPOT!!", getWidth()/2 - 180, getHeight()/2 - 50 );
+			g2D.drawString("GOT THE JACKPOT!!", boardWidth/2 - 200, boardWidth/2 - 50 );
 		}
 		repaint();
 		
 	}
 	
 	
-//	public void get_senses( )
-//	{
-//		
-//		senses = "";
-//		
-//		if ( smell_placement[robo_y][robo_x] == 1  )
-//		{
-//			senses += "  -a horrible smell-  ";
-//		}
-//		
-//		if ( breeze_placement[robo_y][robo_x]  == 1  )
-//		{
-//			senses += "  -a breeze-  ";
-//		}
-//		
-//		if ( glitter_placement[robo_y][robo_x] == 1   )
-//		{
-//			senses += "  -glitter-  ";
-//		}
-//		
-//		
-//		if ( has_gold && !reached_home )
-//		{
-////			senses = "";
-//			senses = "-walking for a safe departure-";
-//		}
-//		
-//		else {
-//			senses = " -nothing- ";
-//		}
-//		
-//	}
 	
 	
 	public void printSense(int arrows, String text) {
@@ -261,10 +237,6 @@ public class BoardGUI extends JPanel {
 		// Drawing border
 		g2D.setColor(Color.black);
         g2D.drawRect(0, 0, boardWidth, boardWidth+80);
-        
-        FontMetrics metrics = g2D.getFontMetrics(g2D.getFont());				
-		g2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-   			 				 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 				
 		
 	}
@@ -292,6 +264,9 @@ public class BoardGUI extends JPanel {
 		reached_home = flag;		 
 	}
 	
+	public boolean get_Has_GOLD() {	
+		return has_gold;
+	}
 	
 
 }

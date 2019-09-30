@@ -48,7 +48,7 @@ public class GUI_Frame extends JPanel {
 		frame = new JFrame(title);
 	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    frame.setBackground(Color.white);
-	    frame.setSize(762, 343);
+	    frame.setSize(width, height);
 
 			
 		

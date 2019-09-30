@@ -19,7 +19,8 @@ public class WumpusWorldExplorer extends SwingWorker<Void, String> {
 	private int goldNode;
 	private int agent_row = 9, agent_col = 0;
 	private boolean GAME_OVER = false;
-	private int SLEEP = 1000;	
+	private boolean NO_MORE_SAFE_WAY = false;
+	private int SLEEP = 2500;	
 	private int[][] pit_possibility, wumpus_possibility, cell_OK, visited, unvisited,
 						nodesID, relationships;
 	
@@ -128,8 +129,11 @@ public class WumpusWorldExplorer extends SwingWorker<Void, String> {
 		visited[9][0] = 1;
 //		count++;
 		dfsExplore(curNodeID);
-//		printRoute();
-		boardMaker.set_Game_WON(true);
+		
+		if(boardMaker.get_Has_GOLD()) {			
+			printRoute();
+		}
+//		boardMaker.set_Game_WON(true);
 //		printSense(arrows, "[SENSE]: sense);
 		
 		return null;
@@ -142,22 +146,27 @@ public class WumpusWorldExplorer extends SwingWorker<Void, String> {
 		if(GAME_OVER) {
 			return;
 		}
-		if(pit_placement[curNodeID / 10][curNodeID % 10] == 1 && wumpus_placement[curNodeID / 10][curNodeID % 10] == 1) {
-			sense = "** DEAD! GAME LOST! **";
-//			boardMaker.printSense(arrows, "[SENSE]: " + sense);
-			publish("[SENSE]: " + sense);
+		if(pit_placement[curNodeID / 10][curNodeID % 10] == 1 || wumpus_placement[curNodeID / 10][curNodeID % 10] == 1) {
 			System.out.println("Node: "+curNodeID+"\n ** DEAD! **");
+//			boardMaker.printSense(arrows, "[SENSE]: " + sense);
+			sense = "** DEAD! GAME LOST! **";
+			publish("[SENSE]: " + sense);
+			publish(Integer.toString(curNodeID));
+			
 			boardMaker.set_Game_LOST(true);
+			goldNode = curNodeID;
 			GAME_OVER = true;
 			return;
 		}
 		
 		if(gold_placement[curNodeID / 10][curNodeID % 10] == 1) {
-//			printSense(arrows, "[SENSE]: sense);
-			sense = "** GOT GOLD **";
-//			boardMaker.printSense(arrows, "[SENSE]: " + sense);
-			publish("[SENSE]: " + sense);
 			System.out.println("Node: "+curNodeID+"\n ** GOT GOLD **");
+//			printSense(arrows, "[SENSE]: sense);
+//			boardMaker.printSense(arrows, "[SENSE]: " + sense);
+			sense = "** GOT GOLD **";
+			publish("[SENSE]: " + sense);
+			publish(Integer.toString(curNodeID));
+			
 			boardMaker.set_Has_GOLD(true);
 			GAME_OVER = true;
 			return;
@@ -272,59 +281,9 @@ public class WumpusWorldExplorer extends SwingWorker<Void, String> {
 
 //				if(count<=80)dfsExplore(safeCell[j]);
 				dfsExplore(safeCell[k]);
-//				count++;
-//				if(count >= 3 && !GAME_OVER) {
-//					count = 0;
-//					if(NumOfUnsafeCell > 0) {
-//						int riskyNodeID = -1;
-//						for(int j = 0; j < NumOfUnsafeCell; j++) {
-//							if(wumpus_possibility[ unsafeCell[j] / 10 ][ unsafeCell[j] % 10 ] == 2) {
-//								riskyNodeID = unsafeCell[j];
-//								String side = "";
-//								if(riskyNodeID == curNodeID-1) side += "LEFT";
-//								else if(riskyNodeID == curNodeID+1) side += "RIGHT";
-//								else if(riskyNodeID == curNodeID-10) side += "UP";
-//								else if(riskyNodeID == curNodeID+10) side += "DOWN";
-////								arrows--;
-////								printSense(arrows, "[DECISION]: WUMPUS should be in "+side+"-Throw Arrow-");
-//								break;
-//							}					
-//						}
-//						if(riskyNodeID == -1) {		
-//							do {
-//								Random rand = new Random();
-//								int x = rand.nextInt( NumOfUnsafeCell );
-//								riskyNodeID = unsafeCell[x];
-//							}while(pit_possibility[ riskyNodeID / 10 ][ riskyNodeID % 10 ] == 2);
-//							String side = "";
-//							if(riskyNodeID == curNodeID-1) side += "LEFT";
-//							else if(riskyNodeID == curNodeID+1) side += "RIGHT";
-//							else if(riskyNodeID == curNodeID-10) side += "UP";
-//							else if(riskyNodeID == curNodeID+10) side += "DOWN";
-//							if(SMELL) {	
-//								if(wumpus_placement[ riskyNodeID / 10 ][ riskyNodeID % 10 ] == 1) {
-//									System.out.println("Node: "+riskyNodeID+"\n ** WUMPUS DEAD! **");
-//								}
-////								arrows--;
-////								printSense(arrows, "[DECISION]: Moving "+side+"-Throwing Arrow for safety-");
-////								try {
-////								Thread.sleep(SLEEP - 200);
-////								} catch (InterruptedException e) {
-////									e.printStackTrace();
-////								}
-////								printSense(arrows, "[SENSE]: ** WUMPUS DEAD **");
-//							}
-//							else {
-////								printSense(arrows, "[DECISION]: -Taking RISK- Moving "+side);
-//							}
-//							
-//						}
-//						parent[riskyNodeID] = curNodeID;
-//						visited[ riskyNodeID / 10 ][ riskyNodeID % 10 ] = 1;
-////						if(count<=20)dfsExplore(riskyNodeID);
-//						dfsExplore(riskyNodeID);
-//					}
-//				}
+				if(k == NumOfSafeCell - 1) {
+					NO_MORE_SAFE_WAY = true;
+				}
 				if(!GAME_OVER) {
 //					boardMaker.printSense(arrows, "[DECISION]: --Stepping Back--");
 //					boardMaker.drawWumpusWorldEnvironment(safeCell[k] / 10, safeCell[k] % 10);
@@ -341,7 +300,8 @@ public class WumpusWorldExplorer extends SwingWorker<Void, String> {
 			}
 		}
 		
-		else if(NumOfUnsafeCell > 0) {
+//		else if(NumOfUnsafeCell > 0) {
+		if(NO_MORE_SAFE_WAY && NumOfUnsafeCell > 0) {
 			int riskyNodeID = -1;
 			for(int j = 0; j < NumOfUnsafeCell; j++) {
 				if(wumpus_possibility[ unsafeCell[j] / 10 ][ unsafeCell[j] % 10 ] == 2) {
@@ -421,23 +381,44 @@ public class WumpusWorldExplorer extends SwingWorker<Void, String> {
 	public void printRoute() {
 		System.out.println();
 		System.out.println("HERE IN PRINT ROUTE");
+		
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		int node = goldNode;
 		System.out.println(goldNode);
-		while(node != -1) {
-			list.add(node);
-			node = parent[node];
-			System.out.println("HERE!!!");
+		
+		publish("[DECISION]: -- GOT GOLD -- Returning Home -- ");
+		try {
+			Thread.sleep(SLEEP - 150);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 		
-		Collections.reverse(list);
+		while(node != -1) {
+			publish("[DECISION]: -- GOT GOLD -- Returning Home -- ");
+			publish(Integer.toString(node));
+//			list.add(node);
+//			System.out.println("HERE!!!");
+			node = parent[node];
+			System.out.println(" Returning: " + node);
+			try {
+				Thread.sleep(SLEEP - 150);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		
-		System.out.println(); 
-		for(int i: list) {  
-		    System.out.print(i + " ");  
-		}  
-	
-		System.out.println(); 
+		boardMaker.set_Game_WON(true);
+		publish("[SENSE]: -- Reached Home -- ");
+		publish(Integer.toString(90));			// STARTING POSITION
+		
+//		Collections.reverse(list);
+//		
+//		System.out.println(); 
+//		for(int i: list) {  
+//		    System.out.print(i + " ");  
+//		}  
+//	
+//		System.out.println(); 
 	}
 	
 	public void setupBoardMaker(BoardMaker board) {

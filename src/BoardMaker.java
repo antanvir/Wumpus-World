@@ -111,6 +111,8 @@ public class BoardMaker {
 		gui.set_Reached_HOME(flag);		 
 	}
 	
-		
+	public boolean get_Has_GOLD() {	
+		return gui.get_Has_GOLD();
+	}
 	
 }
